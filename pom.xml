@@ -15,6 +15,7 @@
         <module>plugins/event-source-nonagent-example</module>
         <module>plugins/message-sink-example</module>
         <module>plugins/service-plugin-example</module>
+        <module>how-to/subscribing-to-named-event-feeds</module>
     </modules>
 
     <properties>
