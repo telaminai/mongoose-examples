@@ -21,11 +21,12 @@ The following diagram illustrates the flow of events and service interactions th
 
 ```mermaid
 flowchart TD
-    %% Event Source
-    eventSource["InMemoryEventSource<br>(test-events)"]
+    subgraph "event-source-agent(SleepingMillisIdleStrategy)"
+
+        %% Event Source 
+        eventSource["InMemoryEventSource<br>(test-events)"]
+    end
     
-    %% Agent
-    sourceAgent["event-source-agent<br>(SleepingMillisIdleStrategy)"]
     
     %% Handler
     handler["ServiceAwareEventHandler<br>(Uses injected services)"]
@@ -33,19 +34,20 @@ flowchart TD
     %% Services
     greetingService["GreetingService<br>(Simple Lifecycle Service)"]
     metricsService["MetricsCollectorService<br>(Worker Service)"]
-    metricsAgent["metrics-agent<br>(SleepingMillisIdleStrategy)"]
+    
     
     %% Events
     stringEvent["String Events<br>(Names: Alice, Bob, etc.)"]
     
     %% Connections
-    eventSource --> sourceAgent
-    sourceAgent --> handler
+    eventSource --> handler
     
     %% Service injection
     greetingService -.-> |"@ServiceRegistered"| handler
     metricsService -.-> |"@ServiceRegistered"| handler
-    metricsService --> metricsAgent
+    subgraph metricsAgent["metrics-agent (SleepingMillisIdleStrategy)"]
+        metricsService
+    end
     
     %% Event flow
     eventSource -- "publishes" --> stringEvent
@@ -55,7 +57,7 @@ flowchart TD
     handler -- "outputs" --> console["Console Output<br>(Formatted greetings)"]
     
     %% Background work
-    metricsAgent -- "periodic work" --> metricsReports["Metrics Reports<br>(Every 3 seconds)"]
+    metricsService -- "periodic work" --> metricsReports["Metrics Reports<br>(Every 3 seconds)"]
     
     %% Styling
     classDef source fill:#f9f,stroke:#333,stroke-width:2px
