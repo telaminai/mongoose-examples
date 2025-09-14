@@ -16,6 +16,15 @@
         <module>plugins/message-sink-example</module>
         <module>plugins/service-plugin-example</module>
         <module>how-to/subscribing-to-named-event-feeds</module>
+        <module>how-to/data-mapping</module>
+        <module>how-to/using-the-scheduler-service</module>
+        <module>how-to/injecting-config-into-a-processor</module>
+        <module>how-to/handler-pipe</module>
+        <module>how-to/object-pool</module>
+        <module>how-to/replay</module>
+        <module>how-to/scheduler-processAsNewEventCycle</module>
+        <module>how-to/core-pin</module>
+        <module>how-to/writing-a-custom-event-to-invoke-strategy</module>
     </modules>
 
     <properties>
