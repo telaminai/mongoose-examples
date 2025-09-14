@@ -14,6 +14,7 @@
         <module>plugins/event-source-example</module>
         <module>plugins/event-source-nonagent-example</module>
         <module>plugins/message-sink-example</module>
+        <module>plugins/service-plugin-example</module>
     </modules>
 
     <properties>
