@@ -37,3 +37,4 @@ build/
 ### Mac OS ###
 .DS_Store
 /.idea/
+/gettting-started/five-minute-yaml-tutorial/run/data-out/processed-events

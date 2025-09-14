@@ -35,11 +35,11 @@ public class NamedFeedsFilterHandler extends ObjectEventHandlerNode {
 
     @Override
     protected boolean handleEvent(Object event) {
-        System.out.println("received:" + event);
         if (sink == null || event == null) {
             return true;
         }
         if (event instanceof String feedName) {
+            System.out.println("publishing to sink:" + event);
             sink.accept(feedName);
         }
         // continue processing chain
