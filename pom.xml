@@ -25,6 +25,7 @@
         <module>how-to/scheduler-processAsNewEventCycle</module>
         <module>how-to/core-pin</module>
         <module>how-to/writing-a-custom-event-to-invoke-strategy</module>
+        <module>how-to/writing-an-admin-command</module>
     </modules>
 
     <properties>
