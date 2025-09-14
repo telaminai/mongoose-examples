@@ -26,6 +26,7 @@ These examples range from simple "getting started" tutorials to more complex cas
 ### Plugins
 
 - [Event Source Example](plugins/event-source-example) - Demonstrates how to create a custom event source by extending the AbstractAgentHostedEventSourceService class, allowing you to generate events at regular intervals.
+- [Event Source Non-Agent Example](plugins/event-source-nonagent-example) - Shows how to create a custom event source that manages its own threading using a ScheduledExecutorService instead of relying on the Mongoose agent infrastructure.
 
 ## Prerequisites
 
