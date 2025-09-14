@@ -13,6 +13,7 @@
         <module>gettting-started/five-minute-yaml-tutorial</module>
         <module>plugins/event-source-example</module>
         <module>plugins/event-source-nonagent-example</module>
+        <module>plugins/message-sink-example</module>
     </modules>
 
     <properties>
