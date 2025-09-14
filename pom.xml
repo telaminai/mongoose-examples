@@ -11,6 +11,7 @@
     <modules>
         <module>gettting-started/five-minute-tutorial</module>
         <module>gettting-started/five-minute-yaml-tutorial</module>
+        <module>plugins/event-source-example</module>
     </modules>
 
     <properties>
@@ -25,6 +26,12 @@
             <groupId>com.telamin</groupId>
             <artifactId>mongoose</artifactId>
             <version>${mongoose.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.40</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
