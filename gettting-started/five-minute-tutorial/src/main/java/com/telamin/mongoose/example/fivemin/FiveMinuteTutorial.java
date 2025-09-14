@@ -72,8 +72,7 @@ public class FiveMinuteTutorial {
                 .addEventSink(sinkCfg)
                 .build();
 
-        LogRecordListener logListener = rec -> {};
-        MongooseServer server = MongooseServer.bootServer(mongooseServerConfig, logListener);
+        MongooseServer server = MongooseServer.bootServer(mongooseServerConfig);
         try {
 
             prices.offer("p1");
@@ -84,12 +83,14 @@ public class FiveMinuteTutorial {
             news.offer("n2");
 
             // Wait for sink messages; should include only p1,p2,n1,n2
+            waitForMessages(memSink, 4, 1, TimeUnit.SECONDS);
         } finally {
             server.stop();
         }
 
         System.out.println("received:");
         waitForMessages(memSink, 4, 1, TimeUnit.SECONDS).forEach(System.out::println);
+
     }
 
     private static List<Object> waitForMessages(InMemoryMessageSink sink, int minCount, long timeout, TimeUnit unit) throws Exception {
