@@ -15,6 +15,69 @@ The example's main class:
 
 - [FiveMinuteTutorial](src/main/java/com/telamin/mongoose/example/fivemin/FiveMinuteTutorial.java)
 
+## Flow Diagram
+
+The following diagram illustrates the flow of events through the system:
+
+```mermaid
+flowchart TD
+    %% Event Sources
+    prices["InMemoryEventSource<br>(prices)"]
+    orders["InMemoryEventSource<br>(orders)"]
+    news["InMemoryEventSource<br>(news)"]
+
+    %% Agents
+    pricesAgent["prices-agent<br>(BusySpinIdleStrategy)"]
+    ordersAgent["orders-agent<br>(BusySpinIdleStrategy)"]
+    newsAgent["news-agent<br>(BusySpinIdleStrategy)"]
+
+    %% Handler
+    filterHandler["NamedFeedsFilterHandler<br>(Subscribes to: prices, news)"]
+
+    %% Sink
+    memSink["InMemoryMessageSink"]
+
+    %% Events
+    p1["Event: p1"]
+    p2["Event: p2"]
+    o1["Event: o1"]
+    o2["Event: o2"]
+    n1["Event: n1"]
+    n2["Event: n2"]
+
+    %% Connections
+    prices --> pricesAgent
+    orders --> ordersAgent
+    news --> newsAgent
+
+    pricesAgent --> filterHandler
+    newsAgent --> filterHandler
+    ordersAgent -.-> |"Not subscribed<br>(events ignored)"| filterHandler
+
+    filterHandler --> memSink
+
+    %% Event flow
+    p1 --> prices
+    p2 --> prices
+    o1 --> orders
+    o2 --> orders
+    n1 --> news
+    n2 --> news
+
+    %% Styling
+    classDef source fill:#f9f,stroke:#333,stroke-width:2px
+    classDef agent fill:#bbf,stroke:#333,stroke-width:1px
+    classDef handler fill:#bfb,stroke:#333,stroke-width:2px
+    classDef sink fill:#fbb,stroke:#333,stroke-width:2px
+    classDef event fill:#fffacd,stroke:#333,stroke-width:1px
+
+    class prices,orders,news source
+    class pricesAgent,ordersAgent,newsAgent agent
+    class filterHandler handler
+    class memSink sink
+    class p1,p2,o1,o2,n1,n2 event
+```
+
 Mongoose maven dependency:
 
 ```xml
