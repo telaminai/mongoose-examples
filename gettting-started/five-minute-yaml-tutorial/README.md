@@ -14,6 +14,65 @@ This is a Maven project that provides a "Five Minute YAML Tutorial" application 
 
 This example can be compared with the [Five Minute Tutorial](../five-minute-tutorial) which uses a programmatic approach to configuring the server.
 
+## Flow Diagram
+
+The following diagram illustrates the flow of events through the system:
+
+```mermaid
+flowchart TD
+    %% Event Sources (Files)
+    newsFile["File: news-events"]
+    priceFile["File: price-events"]
+    orderFile["File: order-events"]
+
+    %% Event Sources
+    newsFeed["FileEventSource<br>(news-Feed)"]
+    priceFeed["FileEventSource<br>(price-Feed)"]
+    orderFeed["FileEventSource<br>(order-Feed)"]
+
+    %% Agent
+    fileAgent["file-source-agent<br>(Polls files for changes)"]
+
+    %% Handler
+    filterHandler["NamedFeedsFilterHandler<br>(Subscribes to: news-Feed, price-Feed)"]
+
+    %% Sink
+    fileSink["FileMessageSink<br>(processed-events)"]
+
+    %% Connections
+    newsFile --> newsFeed
+    priceFile --> priceFeed
+    orderFile --> orderFeed
+
+    newsFeed --> fileAgent
+    priceFeed --> fileAgent
+    orderFeed --> fileAgent
+
+    fileAgent --> filterHandler
+
+    filterHandler --> fileSink
+
+    %% Event flow with subscriptions
+    fileAgent -- "news-Feed events" --> filterHandler
+    fileAgent -- "price-Feed events" --> filterHandler
+    fileAgent -. "order-Feed events<br>(ignored by filter)" .-> filterHandler
+
+    %% Styling
+    classDef file fill:#f9f,stroke:#333,stroke-width:2px
+    classDef source fill:#f9f,stroke:#333,stroke-width:2px
+    classDef agent fill:#bbf,stroke:#333,stroke-width:1px
+    classDef handler fill:#bfb,stroke:#333,stroke-width:2px
+    classDef sink fill:#fbb,stroke:#333,stroke-width:2px
+    classDef event fill:#fffacd,stroke:#333,stroke-width:1px
+
+    class newsFile,priceFile,orderFile file
+    class newsFeed,priceFeed,orderFeed source
+    class fileAgent agent
+    class filterHandler handler
+    class fileSink sink
+    class n1,n2,n3,p1,p2,p3,o1,o2,o3 event
+```
+
 ## What it demonstrates
 
 - Configuring a Mongoose Server using YAML configuration
