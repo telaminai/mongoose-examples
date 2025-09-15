@@ -70,6 +70,7 @@ public class WritingAnAdminCommandExample {
         EventFeedConfig<?> eventFeed = EventFeedConfig.builder()
                 .instance(eventSource)
                 .name("exampleFeed")
+                .broadcast(true)
                 .build();
 
         // Create processor with admin command support
@@ -170,10 +171,10 @@ public class WritingAnAdminCommandExample {
     private static void demonstrateProcessorActivity(InMemoryEventSource<Object> eventSource) {
         System.out.println("\n=== Sending Events to Processor ===");
 
-        eventSource.offer("Hello World");
-        eventSource.offer(42);
-        eventSource.offer("Admin Command Example");
-        eventSource.offer(3.14);
+        eventSource.publishNow("Hello World");
+        eventSource.publishNow(42);
+        eventSource.publishNow("Admin Command Example");
+        eventSource.publishNow(3.14);
 
         System.out.println("Sent 4 events to processor");
     }

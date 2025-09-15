@@ -68,9 +68,9 @@ public class DataMappingExample {
             System.out.println("Publishing input events...");
 
             // Publish some input events
-            eventSource.offer(new TestEvent_In("Hello World"));
-            eventSource.offer(new TestEvent_In("Data Mapping"));
-            eventSource.offer(new TestEvent_In("Mongoose Example"));
+            eventSource.publishNow(new TestEvent_In("Hello World"));
+            eventSource.publishNow(new TestEvent_In("Data Mapping"));
+            eventSource.publishNow(new TestEvent_In("Mongoose Example"));
 
             // Give some time for processing
             Thread.sleep(1000);

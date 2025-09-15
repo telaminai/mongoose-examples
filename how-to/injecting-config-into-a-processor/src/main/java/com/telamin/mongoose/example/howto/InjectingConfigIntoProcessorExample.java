@@ -71,12 +71,12 @@ public class InjectingConfigIntoProcessorExample {
 
             // Publish some test events
             System.out.println("\nPublishing test events...");
-            eventSource.offer("event1");
-            eventSource.offer("event2");
-            eventSource.offer("event3");
-            eventSource.offer("event4");
-            eventSource.offer("event5");
-            eventSource.offer("event6"); // This should trigger threshold behavior
+            eventSource.publishNow("event1");
+            eventSource.publishNow("event2");
+            eventSource.publishNow("event3");
+            eventSource.publishNow("event4");
+            eventSource.publishNow("event5");
+            eventSource.publishNow("event6"); // This should trigger threshold behavior
 
             // Give some time for processing
             Thread.sleep(1000);

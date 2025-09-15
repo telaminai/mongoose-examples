@@ -1,5 +1,6 @@
 package com.telamin.mongoose.example.howto;
 
+import com.fluxtion.agrona.concurrent.BackoffIdleStrategy;
 import com.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 import com.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.fluxtion.runtime.output.MessageSink;
@@ -48,6 +49,7 @@ public class ReplayExample {
                 .instance(eventSource)
                 .name(eventSource.getName())
                 .broadcast(true)
+                .agent("source-agent", new BackoffIdleStrategy())
                 .build();
 
         EventSinkConfig<MessageSink<?>> sinkConfig = EventSinkConfig.<MessageSink<?>>builder()
@@ -89,7 +91,7 @@ public class ReplayExample {
         System.out.println("\n=== Basic Replay Demo ===");
 
         // Clear previous messages
-        sink.getMessages().clear();
+        sink.clear();
 
         // Create replay records with explicit timestamps
         long baseTime = 1_696_000_000_000L; // epoch millis
@@ -125,7 +127,7 @@ public class ReplayExample {
         System.out.println("\n=== Time Sequence Replay Demo ===");
 
         // Clear previous messages
-        sink.getMessages().clear();
+        sink.clear();
 
         // Create replay records with non-sequential timestamps (out of order)
         long baseTime = 1_700_000_000_000L;
@@ -166,7 +168,7 @@ public class ReplayExample {
 
         // First run
         System.out.println("First replay run:");
-        sink.getMessages().clear();
+        sink.clear();
         for (ReplayRecord record : sequence) {
             eventSource.offer(record);
         }
@@ -176,7 +178,7 @@ public class ReplayExample {
 
         // Second run (identical)
         System.out.println("Second replay run (should be identical):");
-        sink.getMessages().clear();
+        sink.clear();
         for (ReplayRecord record : sequence) {
             eventSource.offer(record);
         }

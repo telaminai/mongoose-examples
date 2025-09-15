@@ -32,6 +32,8 @@ public class SchedulerProcessAsNewEventCycleExample {
 
         // Configure and start the server using the simpler API
         MongooseServerConfig serverConfig = new MongooseServerConfig();
+        serverConfig.addEventSource(sink, "memory-event-source", true);
+        serverConfig.addProcessor("process-as-new-event-cycle-processor", new ObjectEventHandlerNode(), "process-as-new-event-cycle-agent");
 
         MongooseServer server = MongooseServer.bootServer(serverConfig);
 

@@ -65,7 +65,7 @@ public class UsingTheSchedulerServiceExample {
             System.out.println("Demonstrating various scheduler patterns...");
 
             // Publish an initial event to trigger scheduler demonstrations
-            eventSource.offer("start-demo");
+            eventSource.publishNow("start-demo");
 
             // Let the example run for a while to see scheduled actions
             Thread.sleep(8000);
@@ -91,7 +91,7 @@ public class UsingTheSchedulerServiceExample {
         private int periodicJobCount = 0;
 
         @ServiceRegistered
-        public void scheduler(SchedulerService scheduler) {
+        public void scheduler(SchedulerService scheduler, String name) {
             this.scheduler = scheduler;
             System.out.println("SchedulerService injected into processor");
         }
