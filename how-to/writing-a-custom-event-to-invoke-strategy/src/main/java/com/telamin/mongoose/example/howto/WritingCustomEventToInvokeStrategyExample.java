@@ -5,6 +5,7 @@ import com.fluxtion.runtime.StaticEventProcessor;
 import com.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 import com.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.fluxtion.runtime.output.MessageSink;
+import com.fluxtion.runtime.service.Service;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.*;
 import com.telamin.mongoose.connector.memory.InMemoryEventSource;
@@ -247,15 +248,16 @@ public class WritingCustomEventToInvokeStrategyExample {
             });
         }
 
+        @Override
+        public void init() {
+            super.init();
+            serviceRegistry.nodeRegistered(this, "stringProcessor");
+            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
+        }
+
         @ServiceRegistered
         public void wire(MessageSink<String> sink, String name) {
             this.sink = sink;
-        }
-
-        @Override
-        public void start() {
-            super.start();
-            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @Override
@@ -299,14 +301,16 @@ public class WritingCustomEventToInvokeStrategyExample {
             });
         }
 
+        @Override
+        public void init() {
+            super.init();
+            serviceRegistry.nodeRegistered(this, "numberProcessor");
+            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
+        }
+
         @ServiceRegistered
         public void wire(MessageSink<String> sink, String name) {
             this.sink = sink;
-        }
-
-        @Override
-        public void start() {
-            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @Override
@@ -348,14 +352,17 @@ public class WritingCustomEventToInvokeStrategyExample {
                 }
             });
         }
+
+        @Override
+        public void init() {
+            super.init();
+            serviceRegistry.nodeRegistered(this, "genericProcessor");
+            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
+        }
+
         @ServiceRegistered
         public void wire(MessageSink<String> sink, String name) {
             this.sink = sink;
-        }
-
-        @Override
-        public void start() {
-            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @Override
