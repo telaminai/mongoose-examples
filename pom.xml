@@ -11,6 +11,7 @@
     <modules>
         <module>gettting-started/five-minute-tutorial</module>
         <module>gettting-started/five-minute-yaml-tutorial</module>
+        <module>gettting-started/app-integration-example</module>
         <module>plugins/event-source-example</module>
         <module>plugins/event-source-nonagent-example</module>
         <module>plugins/message-sink-example</module>
