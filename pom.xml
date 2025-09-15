@@ -33,7 +33,7 @@
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mongoose.version>1.0.3</mongoose.version>
+        <mongoose.version>1.0.5</mongoose.version>
     </properties>
 
     <dependencies>
