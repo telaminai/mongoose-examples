@@ -1,6 +1,8 @@
 package com.telamin.mongoose.example.howto;
 
+import com.fluxtion.runtime.DefaultEventProcessor;
 import com.fluxtion.runtime.StaticEventProcessor;
+import com.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 import com.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.fluxtion.runtime.output.MessageSink;
 import com.telamin.mongoose.MongooseServer;
@@ -8,14 +10,13 @@ import com.telamin.mongoose.config.*;
 import com.telamin.mongoose.connector.memory.InMemoryEventSource;
 import com.telamin.mongoose.connector.memory.InMemoryMessageSink;
 import com.telamin.mongoose.dispatch.AbstractEventToInvocationStrategy;
-import com.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Example demonstrating how to write custom EventToInvokeStrategy implementations.
- * 
+ * <p>
  * This example shows:
  * - Creating custom EventToInvokeStrategy by extending AbstractEventToInvocationStrategy
  * - Filtering which processors can receive events using isValidTarget()
@@ -42,15 +43,25 @@ public class WritingCustomEventToInvokeStrategyExample {
         InMemoryMessageSink sink = new InMemoryMessageSink();
 
         // Configure server with custom event-to-invoke strategy
+        EventProcessorConfig<StringProcessorImpl> stringProcessorConfig = new EventProcessorConfig<>();
+        stringProcessorConfig.setEventHandler(stringProcessor);
+
+        EventProcessorConfig<NumberProcessorImpl> numberProcessorConfig = new EventProcessorConfig<>();
+        numberProcessorConfig.setEventHandler(numberProcessor);
+
+        EventProcessorConfig<GenericProcessorImpl> genericProcessorConfig = new EventProcessorConfig<>();
+        genericProcessorConfig.setEventHandler(genericProcessor);
+
+
         MongooseServerConfig serverConfig = MongooseServerConfig.builder()
                 // Register custom strategy for event dispatch
                 .onEventInvokeStrategy(CustomEventToInvokeStrategy::new)
-                
+
                 .addProcessorGroup(EventProcessorGroupConfig.builder()
                         .agentName("custom-strategy-agent")
-                        .put("string-processor", new EventProcessorConfig(stringProcessor))
-                        .put("number-processor", new EventProcessorConfig(numberProcessor))
-                        .put("generic-processor", new EventProcessorConfig(genericProcessor))
+                        .put("string-processor", stringProcessorConfig)
+                        .put("number-processor", numberProcessorConfig)
+                        .put("generic-processor", genericProcessorConfig)
                         .build())
 
                 .addEventFeed(EventFeedConfig.builder()
@@ -69,7 +80,7 @@ public class WritingCustomEventToInvokeStrategyExample {
 
         try {
             System.out.println("\nServer started with custom EventToInvokeStrategy");
-            
+
             // Wait for system to initialize
             Thread.sleep(1000);
 
@@ -93,22 +104,22 @@ public class WritingCustomEventToInvokeStrategyExample {
         System.out.println("\nPublishing different types of events...");
 
         // String events - should be routed to StringProcessor with transformation
-        eventSource.offer("hello");
-        eventSource.offer("world");
-        eventSource.offer("custom strategy");
+        eventSource.publishNow("hello");
+        eventSource.publishNow("world");
+        eventSource.publishNow("custom strategy");
 
         // Number events - should be routed to NumberProcessor with transformation
-        eventSource.offer(42);
-        eventSource.offer(3.14);
-        eventSource.offer(100L);
+        eventSource.publishNow(42);
+        eventSource.publishNow(3.14);
+        eventSource.publishNow(100L);
 
         // Custom events - should be routed to GenericProcessor
-        eventSource.offer(new CustomEvent("custom-event-1", "data1"));
-        eventSource.offer(new CustomEvent("custom-event-2", "data2"));
+        eventSource.publishNow(new CustomEvent("custom-event-1", "data1"));
+        eventSource.publishNow(new CustomEvent("custom-event-2", "data2"));
 
         // Events that don't match any specific processor - should be filtered out
-        eventSource.offer(new Object());
-        eventSource.offer(new ArrayList<>());
+        eventSource.publishNow(new Object());
+        eventSource.publishNow(new ArrayList<>());
 
         System.out.println("Published various event types:");
         System.out.println("  - String events: 3");
@@ -122,7 +133,7 @@ public class WritingCustomEventToInvokeStrategyExample {
             StringProcessorImpl stringProcessor,
             NumberProcessorImpl numberProcessor,
             GenericProcessorImpl genericProcessor) {
-        
+
         System.out.println("\nProcessing Results:");
         System.out.println("String Processor:");
         System.out.println("  - Events processed: " + stringProcessor.getProcessedCount());
@@ -137,7 +148,7 @@ public class WritingCustomEventToInvokeStrategyExample {
         System.out.println("  - Processed events: " + genericProcessor.getProcessedEvents());
 
         System.out.println("Total messages in sink: " + sink.getMessages().size());
-        
+
         System.out.println("\nCustom Strategy Benefits:");
         System.out.println("  - Strongly-typed event callbacks");
         System.out.println("  - Event filtering and routing");
@@ -170,10 +181,10 @@ public class WritingCustomEventToInvokeStrategyExample {
             if (event instanceof CustomEvent customEvent && eventProcessor instanceof GenericProcessor genericProc) {
                 // Transform: create enriched event
                 EnrichedCustomEvent enriched = new EnrichedCustomEvent(
-                    customEvent.getName(),
-                    customEvent.getData(),
-                    System.currentTimeMillis(),
-                    "PROCESSED"
+                        customEvent.getName(),
+                        customEvent.getData(),
+                        System.currentTimeMillis(),
+                        "PROCESSED"
                 );
                 genericProc.onCustomEvent(enriched);
                 return;
@@ -183,7 +194,7 @@ public class WritingCustomEventToInvokeStrategyExample {
             if (isValidTarget(eventProcessor)) {
                 eventProcessor.onEvent(event);
             }
-            
+
             // Events that don't match any processor are silently filtered out
         }
 
@@ -191,8 +202,8 @@ public class WritingCustomEventToInvokeStrategyExample {
         protected boolean isValidTarget(StaticEventProcessor eventProcessor) {
             // Only accept processors that implement our marker interfaces
             return eventProcessor instanceof StringProcessor ||
-                   eventProcessor instanceof NumberProcessor ||
-                   eventProcessor instanceof GenericProcessor;
+                    eventProcessor instanceof NumberProcessor ||
+                    eventProcessor instanceof GenericProcessor;
         }
     }
 
@@ -220,10 +231,21 @@ public class WritingCustomEventToInvokeStrategyExample {
     /**
      * Processor that handles String events with strongly-typed callback
      */
-    public static class StringProcessorImpl extends ObjectEventHandlerNode implements StringProcessor {
+    public static class StringProcessorImpl extends DefaultEventProcessor implements StringProcessor {
         private MessageSink<String> sink;
         private volatile int processedCount = 0;
         private final List<String> processedStrings = new ArrayList<>();
+
+        public StringProcessorImpl() {
+            super(new ObjectEventHandlerNode() {
+                @Override
+                protected boolean handleEvent(Object event) {
+                    // This should not be called due to our custom strategy
+                    System.out.println("StringProcessor.handleEvent called with: " + event);
+                    return true;
+                }
+            });
+        }
 
         @ServiceRegistered
         public void wire(MessageSink<String> sink, String name) {
@@ -232,27 +254,22 @@ public class WritingCustomEventToInvokeStrategyExample {
 
         @Override
         public void start() {
-            getContext().subscribeToNamedFeed("custom-strategy-feed");
+            super.start();
+            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @Override
         public void onString(String str) {
             processedCount++;
             processedStrings.add(str);
-            
+
             if (sink != null) {
                 sink.accept("StringProcessor processed: " + str);
             }
-            
+
             System.out.println("StringProcessor received: " + str);
         }
 
-        @Override
-        protected boolean handleEvent(Object event) {
-            // This should not be called due to our custom strategy
-            System.out.println("StringProcessor.handleEvent called with: " + event);
-            return true;
-        }
 
         public int getProcessedCount() {
             return processedCount;
@@ -266,10 +283,21 @@ public class WritingCustomEventToInvokeStrategyExample {
     /**
      * Processor that handles Number events with strongly-typed callback
      */
-    public static class NumberProcessorImpl extends ObjectEventHandlerNode implements NumberProcessor {
+    public static class NumberProcessorImpl extends DefaultEventProcessor implements NumberProcessor {
         private MessageSink<String> sink;
         private volatile int processedCount = 0;
         private final List<Double> processedNumbers = new ArrayList<>();
+
+        public NumberProcessorImpl() {
+            super(new ObjectEventHandlerNode() {
+                @Override
+                protected boolean handleEvent(Object event) {
+                    // This should not be called due to our custom strategy
+                    System.out.println("NumberProcessor.handleEvent called with: " + event);
+                    return true;
+                }
+            });
+        }
 
         @ServiceRegistered
         public void wire(MessageSink<String> sink, String name) {
@@ -278,26 +306,19 @@ public class WritingCustomEventToInvokeStrategyExample {
 
         @Override
         public void start() {
-            getContext().subscribeToNamedFeed("custom-strategy-feed");
+            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @Override
         public void onNumber(double number) {
             processedCount++;
             processedNumbers.add(number);
-            
+
             if (sink != null) {
                 sink.accept("NumberProcessor processed: " + number);
             }
-            
-            System.out.println("NumberProcessor received: " + number);
-        }
 
-        @Override
-        protected boolean handleEvent(Object event) {
-            // This should not be called due to our custom strategy
-            System.out.println("NumberProcessor.handleEvent called with: " + event);
-            return true;
+            System.out.println("NumberProcessor received: " + number);
         }
 
         public int getProcessedCount() {
@@ -312,11 +333,21 @@ public class WritingCustomEventToInvokeStrategyExample {
     /**
      * Processor that handles CustomEvent events with strongly-typed callback
      */
-    public static class GenericProcessorImpl extends ObjectEventHandlerNode implements GenericProcessor {
+    public static class GenericProcessorImpl extends DefaultEventProcessor implements GenericProcessor {
         private MessageSink<String> sink;
         private volatile int processedCount = 0;
         private final List<EnrichedCustomEvent> processedEvents = new ArrayList<>();
 
+        public GenericProcessorImpl() {
+            super(new ObjectEventHandlerNode() {
+                @Override
+                protected boolean handleEvent(Object event) {
+                    // This should not be called due to our custom strategy
+                    System.out.println("GenericProcessorImpl.handleEvent called with: " + event);
+                    return true;
+                }
+            });
+        }
         @ServiceRegistered
         public void wire(MessageSink<String> sink, String name) {
             this.sink = sink;
@@ -324,26 +355,19 @@ public class WritingCustomEventToInvokeStrategyExample {
 
         @Override
         public void start() {
-            getContext().subscribeToNamedFeed("custom-strategy-feed");
+            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @Override
         public void onCustomEvent(EnrichedCustomEvent event) {
             processedCount++;
             processedEvents.add(event);
-            
+
             if (sink != null) {
                 sink.accept("GenericProcessor processed: " + event);
             }
-            
-            System.out.println("GenericProcessor received: " + event);
-        }
 
-        @Override
-        protected boolean handleEvent(Object event) {
-            // This should not be called due to our custom strategy
-            System.out.println("GenericProcessor.handleEvent called with: " + event);
-            return true;
+            System.out.println("GenericProcessor received: " + event);
         }
 
         public int getProcessedCount() {
@@ -404,8 +428,8 @@ public class WritingCustomEventToInvokeStrategyExample {
 
         @Override
         public String toString() {
-            return "EnrichedCustomEvent{name='" + getName() + "', data='" + getData() + 
-                   "', timestamp=" + timestamp + ", status='" + status + "'}";
+            return "EnrichedCustomEvent{name='" + getName() + "', data='" + getData() +
+                    "', timestamp=" + timestamp + ", status='" + status + "'}";
         }
     }
 }
