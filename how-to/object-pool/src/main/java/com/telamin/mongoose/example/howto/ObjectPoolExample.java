@@ -84,10 +84,10 @@ public class ObjectPoolExample {
         long startGcCount = getTotalGcCount();
         long startMemory = getUsedMemoryMB();
 
-        int messageCount = 100_000;
+        int messageCount = 1_000_000;
 
         for (int i = 0; i < messageCount; i++) {
-            eventSource.publish("high-rate-message-" + i);
+            eventSource.publish("high-rate-message-");
 
             // Small pause to prevent overwhelming the system
             if (i % 10_000 == 0 && i > 0) {
@@ -122,7 +122,7 @@ public class ObjectPoolExample {
             System.out.println("Publishing burst " + (burst + 1) + "...");
 
             for (int i = 0; i < 1000; i++) {
-                eventSource.publish("burst-" + burst + "-message-" + i);
+                eventSource.publish("burst-message-");
             }
 
             Thread.sleep(100); // Pause between bursts
@@ -215,6 +215,7 @@ public class ObjectPoolExample {
         private volatile long processedCount = 0;
         private volatile long lastReportTime = System.currentTimeMillis();
         private volatile long lastReportCount = 0;
+        private final StringBuilder sb = new StringBuilder();
 
         @ServiceRegistered
         public void wire(MessageSink<String> sink, String name) {
@@ -226,7 +227,6 @@ public class ObjectPoolExample {
             if (event instanceof PooledMessage pooledMessage) {
                 processedCount++;
 
-                String processedMessage = "PROCESSED: " + pooledMessage.toString();
 
                 // Report progress every 10,000 messages
                 if (processedCount % 10_000 == 0) {
@@ -236,8 +236,11 @@ public class ObjectPoolExample {
 
                     if (timeDiff > 0) {
                         long rate = (countDiff * 1000) / timeDiff;
-                        System.out.println("Processed " + processedCount + " messages, rate: " + rate + " msg/s, " +
-                                         "heap: " + getUsedMemoryMB() + " MB, GC: " + getTotalGcCount());
+                        sb.append("Processed ").append(processedCount).append(" messages, rate: ").append(rate)
+                                .append(" msg/s, heap: ").append(getUsedMemoryMB()).append(" MB, GC: ")
+                                .append(getTotalGcCount());
+                        System.out.println(sb);
+                        sb.setLength(0);
                     }
 
                     lastReportTime = currentTime;
@@ -245,6 +248,7 @@ public class ObjectPoolExample {
                 }
 
                 if (sink != null && processedCount <= 10) {
+                    String processedMessage = "PROCESSED: " + pooledMessage.toString();
                     // Only send first few messages to sink to avoid overwhelming it
                     sink.accept(processedMessage);
                 }
