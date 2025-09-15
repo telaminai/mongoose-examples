@@ -1,19 +1,19 @@
-# Five Minute Tutorial Example
+# How To: Subscribing to Named Event Feeds
 
 **Mongoose project homepage:** https://telaminai.github.io/mongoose/
 
 [![CI](https://github.com/telaminai/mongoose-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/telaminai/mongoose-examples/actions/workflows/ci.yml)
 
-This is a Maven project that provides a "Five Minute Tutorial" application showing how to:
+This is a Maven project that demonstrates how to subscribe to specific named EventFeeds and ignore others. The example shows how to:
 
-- Create multiple named event feeds
-- Subscribe to specific named feeds using a filter handler
-- Configure and boot a Mongoose Server with multiple feeds and a processor
-- Demonstrate selective event processing based on feed names
+- Name each EventFeed via EventFeedConfig.name("...")
+- Subscribe to selected feed names from a processor using getContext().subscribeToNamedFeed("...")
+- Forward only events from the selected feeds to a sink
+- Ignore events from feeds that are not subscribed to
 
 The example's main class:
 
-- [FiveMinuteTutorial](src/main/java/com/telamin/mongoose/example/fivemin/FiveMinuteTutorial.java)
+- [SubscribingToNamedEventFeedsExample](src/main/java/com/telamin/mongoose/example/howto/SubscribingToNamedEventFeedsExample.java)
 
 ## Flow Diagram
 
@@ -94,9 +94,10 @@ Mongoose maven dependency:
 
 - Creating multiple named in-memory event sources
 - Implementing a filter handler that only processes events from specific named feeds
-- Subscribing to specific named feeds during handler initialization
+- Subscribing to specific named feeds during handler initialization using getContext().subscribeToNamedFeed()
 - Configuring multiple feed agents with their own idle strategies
 - Using an in-memory sink to collect and display the filtered messages
+- Demonstrating that events from non-subscribed feeds are ignored
 
 ## Prerequisites
 
@@ -107,6 +108,8 @@ Mongoose maven dependency:
       it to your local repository, and ensure the version in this example's pom.xml (<mongoose.version>) matches.
 
 ## Sample code
+
+### Filter Handler that Subscribes to Specific Feed Names
 
 The sample below shows how to create a filter handler that only processes events from specific named feeds:
 
@@ -127,6 +130,7 @@ public class NamedFeedsFilterHandler extends ObjectEventHandlerNode {
 
     @Override
     public void start() {
+        // Subscribe to the selected feed names at startup
         acceptedFeedNames.forEach(feedName -> getContext().subscribeToNamedFeed(feedName));
     }
 
@@ -135,26 +139,31 @@ public class NamedFeedsFilterHandler extends ObjectEventHandlerNode {
         if (sink == null || event == null) {
             return true;
         }
-        if (event instanceof String feedName) {
-            sink.accept(feedName);
+        // In this example, the feed payload is a String, so just forward it
+        if (event instanceof String payload) {
+            sink.accept(payload);
         }
-        // continue processing chain
         return true;
     }
 }
 ```
 
-Example source in this project: [FiveMinuteTutorial](src/main/java/com/telamin/mongoose/example/fivemin/FiveMinuteTutorial.java)
+Key points:
+- The handler subscribes to specific feed names in the `start()` method using `getContext().subscribeToNamedFeed(feedName)`
+- Only events from subscribed feeds will be delivered to the `handleEvent()` method
+- Events from non-subscribed feeds are automatically ignored by the Mongoose framework
 
-The main application sets up three named feeds but only processes events from two of them:
+### Main Application Setup
+
+The main application sets up three named feeds but only subscribes to two of them:
 
 ```java
-// Feeds: three named in-memory sources
+// Create three named in-memory event sources
 InMemoryEventSource<String> prices = new InMemoryEventSource<>();
 InMemoryEventSource<String> orders = new InMemoryEventSource<>();
 InMemoryEventSource<String> news = new InMemoryEventSource<>();
 
-// Processor that only forwards events from feeds: prices, news
+// Create processor that only forwards events from feeds: prices, news
 NamedFeedsFilterHandler filterHandler = new NamedFeedsFilterHandler(Set.of("prices", "news"));
 
 // Build EventFeed configs with names
@@ -164,47 +173,28 @@ EventFeedConfig<?> pricesFeed = EventFeedConfig.builder()
         .agent("prices-agent", new BusySpinIdleStrategy())
         .build();
 
-// ... similar configuration for orders and news feeds
-
-// sink config
-EventSinkConfig<MessageSink<?>> sinkCfg = EventSinkConfig.<MessageSink<?>>builder()
-        .instance(memSink)
-        .name("memSink")
+EventFeedConfig<?> ordersFeed = EventFeedConfig.builder()
+        .instance(orders)
+        .name("orders")
+        .agent("orders-agent", new BusySpinIdleStrategy())
         .build();
 
-// build the server composing the component configs
-MongooseServerConfig mongooseServerConfig = MongooseServerConfig.builder()
-        .addProcessorGroup(processorGroup)
-        .addEventFeed(pricesFeed)
-        .addEventFeed(ordersFeed)
-        .addEventFeed(newsFeed)
-        .addEventSink(sinkCfg)
+EventFeedConfig<?> newsFeed = EventFeedConfig.builder()
+        .instance(news)
+        .name("news")
+        .agent("news-agent", new BusySpinIdleStrategy())
         .build();
-
-MongooseServer server = MongooseServer.bootServer(mongooseServerConfig);
 
 // Publish events to all feeds
 prices.offer("p1");
 prices.offer("p2");
-orders.offer("o1"); // ignored by filter
-orders.offer("o2"); // ignored by filter
+orders.offer("o1"); // This will be ignored
+orders.offer("o2"); // This will be ignored
 news.offer("n1");
 news.offer("n2");
 
 // Only events from "prices" and "news" feeds will be processed
 ```
-
-How it boots and runs:
-
-- Create and configure components:
-    - Create three named in-memory event sources: prices, orders, and news
-    - Create a filter handler that only subscribes to "prices" and "news" feeds
-    - Configure each feed with its own agent and idle strategy
-    - Set up an in-memory sink to collect processed messages
-- Boot the server with the configuration
-- Publish events to all three feeds
-- Only events from the "prices" and "news" feeds are processed and sent to the sink
-- The application prints the received messages, which should only include events from the subscribed feeds
 
 ## Build
 
@@ -218,68 +208,62 @@ There are two common ways to run the example:
 
 1) Via your IDE:
 
-- Set the main class to `com.telamin.mongoose.example.fivemin.FiveMinuteTutorial`
+- Set the main class to `com.telamin.mongoose.example.howto.SubscribingToNamedEventFeedsExample`
 
 2) Via the JAR:
 
 - Build: `./mvnw -q package`
-- Run: `java -jar target/five-minute-tutorial-1.0-SNAPSHOT.jar`
+- Run: `java -jar target/subscribing-to-named-event-feeds-1.0-SNAPSHOT.jar`
 
 Expected output:
 
 ```
-received:
+Publishing events to all three feeds...
+
+Received messages (should only include prices and news, not orders):
 p1
 p2
 n1
 n2
+
+Expected: p1, p2, n1, n2 (orders o1, o2 are ignored)
+Actual count: 4 messages
 ```
 
 Note that events from the "orders" feed (o1, o2) are not included in the output because the filter handler only subscribes to the "prices" and "news" feeds.
 
-## Testing
+## Key Concepts
 
-This project uses JUnit 5 for testing the filter handler:
+### Named Event Feeds
 
-- Test source: [NamedFeedsFilterHandlerTest](src/test/java/com/telamin/mongoose/example/fivemin/NamedFeedsFilterHandlerTest.java)
-- Run all tests: `./mvnw -q test`
+- Event feeds are given names using `EventFeedConfig.builder().name("feedName")`
+- Multiple feeds can have different names and run on different agents
+- Feed names are used for selective subscription
 
-```java
-@Test
-public void testHandleEvent_ForwardsStringEvents() {
-    // When
-    handler.handleEvent("testEvent");
+### Selective Subscription
 
-    // Then
-    Assertions.assertEquals(1, testSink.getMessages().size());
-    Assertions.assertEquals("testEvent", testSink.getMessages().get(0));
-}
+- Processors can subscribe to specific feeds by name using `getContext().subscribeToNamedFeed("feedName")`
+- Only events from subscribed feeds are delivered to the processor
+- Non-subscribed feeds are automatically ignored
+- Subscription happens during the `start()` lifecycle method
 
-@Test
-public void testHandleEvent_IgnoresNonStringEvents() {
-    // When
-    handler.handleEvent(123);
+### Event Flow Control
 
-    // Then
-    Assertions.assertTrue(testSink.getMessages().isEmpty());
-}
-```
-
-What the tests validate:
-
-- The filter handler correctly forwards String events to the message sink
-- The filter handler ignores non-String events
-- The tests use a simple TestMessageSink implementation for capturing and verifying messages
+- This pattern allows for fine-grained control over which events reach which processors
+- Useful for building systems that need to handle different types of events from different sources
+- Enables event routing and filtering at the infrastructure level
 
 ## Notes
 
-- This example demonstrates how to selectively process events based on feed names, which is useful for building systems that need to handle different types of events from different sources.
+- This example demonstrates selective event processing based on feed names, which is useful for building systems that need to handle different types of events from different sources.
 - Each feed has its own agent thread and idle strategy, allowing for independent configuration of how each feed processes events.
 - The filter handler subscribes to specific named feeds during its start() method, showing how to dynamically configure subscriptions.
 - The example uses BusySpinIdleStrategy for very low latency. For general usage, consider a less CPU-intensive idle strategy.
+- Events from non-subscribed feeds are ignored at the framework level, not in user code.
 
 ## Links
 
 - Mongoose GitHub repository: https://github.com/telaminai/mongoose
 - Mongoose project homepage: https://telaminai.github.io/mongoose/
-- Example source in this project: [FiveMinuteTutorial](src/main/java/com/telamin/mongoose/example/fivemin/FiveMinuteTutorial.java)
+- Example source in this project: [SubscribingToNamedEventFeedsExample](src/main/java/com/telamin/mongoose/example/howto/SubscribingToNamedEventFeedsExample.java)
+- Related how-to guide: [How to subscribe to specific named EventFeeds](https://telaminai.github.io/mongoose/docs/how-to/how-to-subscribing-to-named-event-feeds/)

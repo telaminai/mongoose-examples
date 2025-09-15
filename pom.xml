@@ -11,6 +11,22 @@
     <modules>
         <module>gettting-started/five-minute-tutorial</module>
         <module>gettting-started/five-minute-yaml-tutorial</module>
+        <module>gettting-started/app-integration-example</module>
+        <module>plugins/event-source-example</module>
+        <module>plugins/event-source-nonagent-example</module>
+        <module>plugins/message-sink-example</module>
+        <module>plugins/service-plugin-example</module>
+        <module>how-to/subscribing-to-named-event-feeds</module>
+        <module>how-to/data-mapping</module>
+        <module>how-to/using-the-scheduler-service</module>
+        <module>how-to/injecting-config-into-a-processor</module>
+        <module>how-to/handler-pipe</module>
+        <module>how-to/object-pool</module>
+        <module>how-to/replay</module>
+        <module>how-to/scheduler-processAsNewEventCycle</module>
+        <module>how-to/core-pin</module>
+        <module>how-to/writing-a-custom-event-to-invoke-strategy</module>
+        <module>how-to/writing-an-admin-command</module>
     </modules>
 
     <properties>
@@ -25,6 +41,12 @@
             <groupId>com.telamin</groupId>
             <artifactId>mongoose</artifactId>
             <version>${mongoose.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.40</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
