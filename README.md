@@ -20,9 +20,9 @@ These examples range from simple "getting started" tutorials to more complex cas
 
 ### Getting Started
 
-- [Five Minute Tutorial](gettting-started/five-minute-tutorial) - A programmatic approach to configuring a Mongoose server with multiple named event feeds and selective event processing.
-- [Five Minute YAML Tutorial](gettting-started/five-minute-yaml-tutorial) - The same functionality as the Five Minute Tutorial, but using YAML configuration instead of programmatic configuration.
-- [Stream Programming Tutorial](gettting-started/stream-programming-tutorial) - Demonstrates native Fluxtion DataFlow stream programming in Mongoose where lifecycle and feed subscriptions are handled automatically.
+- [Five Minute Tutorial](getting-started/five-minute-tutorial) - A programmatic approach to configuring a Mongoose server with multiple named event feeds and selective event processing.
+- [Five Minute YAML Tutorial](getting-started/five-minute-yaml-tutorial) - The same functionality as the Five Minute Tutorial, but using YAML configuration instead of programmatic configuration.
+- [Stream Programming Tutorial](getting-started/stream-programming-tutorial) - Demonstrates native Fluxtion DataFlow stream programming in Mongoose where lifecycle and feed subscriptions are handled automatically.
 
 ### Plugins
 

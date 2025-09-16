@@ -9,9 +9,10 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>gettting-started/five-minute-tutorial</module>
-        <module>gettting-started/five-minute-yaml-tutorial</module>
-        <module>gettting-started/app-integration-tutorial</module>
+        <module>getting-started/five-minute-tutorial</module>
+        <module>getting-started/five-minute-yaml-tutorial</module>
+        <module>getting-started/app-integration-tutorial</module>
+        <module>getting-started/stream-programming-tutorial</module>
         <module>plugins/event-source-example</module>
         <module>plugins/event-source-nonagent-example</module>
         <module>plugins/message-sink-example</module>
@@ -27,7 +28,6 @@
         <module>how-to/core-pin</module>
         <module>how-to/writing-a-custom-event-to-invoke-strategy</module>
         <module>how-to/writing-an-admin-command</module>
-        <module>gettting-started/stream-programming-tutorial</module>
     </modules>
 
     <properties>

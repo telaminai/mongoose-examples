@@ -37,5 +37,5 @@ build/
 ### Mac OS ###
 .DS_Store
 /.idea/
-/gettting-started/five-minute-yaml-tutorial/run/data-out/processed-events
+/getting-started/five-minute-yaml-tutorial/run/data-out/processed-events
 /gettting-started/five-minute-yaml-tutorial/run/data-in/*.readPointer
