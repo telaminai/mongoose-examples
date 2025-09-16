@@ -49,7 +49,7 @@ flowchart TD
     class df handler
 
     %% Force wider DataFlow Processor box
-    style df width:420px, text-align:left
+    style df width:320px, text-align:left
 ```
 
 ## Sample 
