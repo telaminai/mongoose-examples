@@ -24,11 +24,11 @@ public class PnlSummary {
     @Override
     public String toString() {
         return "PnlSummary{" +
-               "\n\tmtmInstrument=" + mtmInstrument.instrumentName() +
-               "\n\tpnl=" + pnl +
-               "\n\t" + mtmAssetMap.values().stream()
-                       .map(i -> i.getInstrument().instrumentName() + " pos:" + i.getPosition() + " mtmPos:" + i.getMtmPosition())
-                       .collect(Collectors.joining("\n\t")) +
-               '}';
+                "\n\tmtmInstrument=" + mtmInstrument.instrumentName() +
+                "\n\tpnl=" + pnl +
+                "\n\t" + mtmAssetMap.values().stream()
+                .map(i -> i.getInstrument().instrumentName() + " pos:" + i.getPosition() + " mtmPos:" + i.getMtmPosition())
+                .collect(Collectors.joining("\n\t")) +
+                '}';
     }
 }

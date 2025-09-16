@@ -39,3 +39,4 @@ build/
 /.idea/
 /getting-started/five-minute-yaml-tutorial/run/data-out/processed-events
 /gettting-started/five-minute-yaml-tutorial/run/data-in/*.readPointer
+/getting-started/app-integration-tutorial/output/pnl-summary.jsonl

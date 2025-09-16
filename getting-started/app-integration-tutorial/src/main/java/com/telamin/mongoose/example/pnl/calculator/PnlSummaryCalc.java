@@ -1,13 +1,12 @@
 package com.telamin.mongoose.example.pnl.calculator;
 
-
 import com.fluxtion.runtime.annotations.OnEventHandler;
 import com.fluxtion.runtime.annotations.OnTrigger;
 import com.fluxtion.runtime.annotations.builder.FluxtionIgnore;
 import com.fluxtion.runtime.dataflow.groupby.GroupBy;
 import com.fluxtion.runtime.event.Signal;
 import com.telamin.mongoose.example.pnl.events.PnlSummary;
-import com.telamin.mongoose.example.pnl.flatmapexample.PnlExampleMain;
+import com.telamin.mongoose.example.pnl.PnlExampleMain;
 import com.telamin.mongoose.example.pnl.refdata.Instrument;
 import lombok.Getter;
 
@@ -27,7 +26,7 @@ public class PnlSummaryCalc {
     }
 
     @OnEventHandler(filterString = PnlExampleMain.EOB_TRADE_KEY)
-    public boolean eobTrigger(Signal<String> eobSignal){
+    public boolean eobTrigger(Signal<String> eobSignal) {
         return true;
     }
 
@@ -35,7 +34,7 @@ public class PnlSummaryCalc {
         pnlSummary.setMtmInstrument(mtMRateCalculator.getMtmInstrument());
         pnlSummary.getMtmAssetMap().clear();
         pnlSummary.getMtmAssetMap().putAll(instrumentMtmGroupBy.toMap());
-        if(pnlSummary.calcPnl()){
+        if (pnlSummary.calcPnl()) {
             return pnlSummary;
         }
         return null;
@@ -46,7 +45,7 @@ public class PnlSummaryCalc {
         pnlSummary.setMtmInstrument(mtMRateCalculator.getMtmInstrument());
         pnlSummary.getMtmAssetMap().clear();
         pnlSummary.getMtmAssetMap().putAll(instrumentMtmGroupBy.toMap());
-        if(pnlSummary.calcPnl()){
+        if (pnlSummary.calcPnl()) {
             return pnlSummary;
         }
         return null;

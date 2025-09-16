@@ -1,0 +1,5 @@
+{"symbol":{"symbolName":"EURJPY","dealtInstrument":{"instrumentName":"EUR"},"contraInstrument":{"instrumentName":"JPY"}},"dealtVolume":-400.0,"contraVolume":80000.0}
+{"symbol":{"symbolName":"EURUSD","dealtInstrument":{"instrumentName":"EUR"},"contraInstrument":{"instrumentName":"USD"}},"dealtVolume":500.0,"contraVolume":-1100.0}
+{"symbol":{"symbolName":"USDCHF","dealtInstrument":{"instrumentName":"USD"},"contraInstrument":{"instrumentName":"CHF"}},"dealtVolume":500.0,"contraVolume":-1100.0}
+{"symbol":{"symbolName":"EURGBP","dealtInstrument":{"instrumentName":"EUR"},"contraInstrument":{"instrumentName":"GBP"}},"dealtVolume":1200.0,"contraVolume":-1000.0}
+{"symbol":{"symbolName":"GBPUSD","dealtInstrument":{"instrumentName":"GBP"},"contraInstrument":{"instrumentName":"USD"}},"dealtVolume":1500.0,"contraVolume":-700.0}

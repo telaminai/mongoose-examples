@@ -1,0 +1,4 @@
+{"symbol":{"symbolName":"EURGBP","dealtInstrument":{"instrumentName":"EUR"},"contraInstrument":{"instrumentName":"GBP"}},"rate":0.9}
+{"symbol":{"symbolName":"EURUSD","dealtInstrument":{"instrumentName":"EUR"},"contraInstrument":{"instrumentName":"USD"}},"rate":1.1}
+{"symbol":{"symbolName":"EURCHF","dealtInstrument":{"instrumentName":"EUR"},"contraInstrument":{"instrumentName":"CHF"}},"rate":1.2}
+{"symbol":{"symbolName":"EURJPY","dealtInstrument":{"instrumentName":"EUR"},"contraInstrument":{"instrumentName":"JPY"}},"rate":200}
