@@ -31,7 +31,7 @@ flowchart TD
     pricesAgent["prices-agent<br>(BusySpinIdleStrategy)"]
 
     %% DataFlow Processor
-    df["DataFlow Processor     <br>.subscribeToFeed('prices', String.class)<br>.map(String::toUpperCase)<br>.console('Hello, {}')"]
+    df["DataFlow Processor                                <br>.subscribeToFeed('prices', String.class)<br>.map(String::toUpperCase)<br>.console('Hello, {}')"]
 
     %% Connections
     prices --> pricesAgent
