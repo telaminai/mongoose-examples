@@ -47,6 +47,9 @@ flowchart TD
     class prices source
     class pricesAgent agent
     class df handler
+
+    %% Force wider DataFlow Processor box
+    style df width:420px, text-align:left
 ```
 
 ## Sample 
