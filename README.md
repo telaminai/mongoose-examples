@@ -41,6 +41,7 @@ These examples range from simple "getting started" tutorials to more complex cas
 - [Replay](how-to/replay) - Shows how to implement deterministic replay with ReplayRecord and the data-driven clock for testing and debugging.
 - [Core Pin](how-to/core-pin) - Shows how to pin agent threads to specific CPU cores for optimal performance in latency-sensitive applications.
 - [Writing a Custom Event to Invoke Strategy](how-to/writing-a-custom-event-to-invoke-strategy) - Demonstrates how to create custom EventToInvokeStrategy implementations for specialized event handling patterns.
+- [Scheduler processAsNewEventCycle](how-to/scheduler-processAsNewEventCycle) - Demonstrates re-entrant publishing with processAsNewEventCycle and SchedulerService.
 
 ## Prerequisites
 
@@ -80,5 +81,4 @@ Contributions to this repository are welcome! If you have an example or tutorial
 - [Mongoose Documentation](https://telaminai.github.io/mongoose/docs/)
 
 ## Under construction 
-### How-To Guides
-- [Scheduler processAsNewEventCycle](how-to/scheduler-processAsNewEventCycle) - Demonstrates re-entrant publishing with processAsNewEventCycle and SchedulerService.
+none
