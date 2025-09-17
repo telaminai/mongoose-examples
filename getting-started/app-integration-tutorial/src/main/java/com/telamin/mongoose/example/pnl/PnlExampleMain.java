@@ -40,7 +40,10 @@ import static com.telamin.mongoose.example.pnl.refdata.RefData.*;
 public class PnlExampleMain {
 
     public static final String EOB_TRADE_KEY = "eob";
-    private static InMemoryEventSource<MidPrice> priceFeed;
+    public static final String INPUT_TRADES_JSONL = "./data-in/trades.jsonl";
+    public static final String INPUT_MID_RATE_JSONL = "./data-in/midRate.jsonl";
+    public static final String OUTPUT_PNL_SUMMARY_JSONL = "./data-out/pnl-summary.jsonl";
+
     private static InMemoryEventSource<MtmInstrument> mtmFeed;
 
 
@@ -77,7 +80,7 @@ public class PnlExampleMain {
 
     private static void buildFeeds(MongooseServerConfig.Builder mongooseServerConfig) {
         FileEventSource priceFeed = new FileEventSource();
-        priceFeed.setFilename("./input/midRate.jsonl");
+        priceFeed.setFilename(INPUT_MID_RATE_JSONL);
         priceFeed.setReadStrategy(ReadStrategy.EARLIEST);
         priceFeed.setCacheEventLog(true);
         EventFeedConfig<?> pricesFeedConfig = EventFeedConfig.<String>builder()
@@ -89,7 +92,7 @@ public class PnlExampleMain {
                 .build();
 
         FileEventSource tradesFeed = new FileEventSource();
-        tradesFeed.setFilename("./input/trades.jsonl");
+        tradesFeed.setFilename(INPUT_TRADES_JSONL);
         tradesFeed.setReadStrategy(ReadStrategy.EARLIEST);
 
         EventFeedConfig<?> tradesFeedConfig = EventFeedConfig.<String>builder()
@@ -116,7 +119,7 @@ public class PnlExampleMain {
 
     private static void buildSinks(MongooseServerConfig.Builder mongooseServerConfig) {
         FileMessageSink fileSink = new FileMessageSink();
-        fileSink.setFilename("./output/pnl-summary.jsonl");
+        fileSink.setFilename(OUTPUT_PNL_SUMMARY_JSONL);
 
         EventSinkConfig<MessageSink<?>> sinkConfig = EventSinkConfig.<MessageSink<?>>builder()
                 .instance(fileSink)

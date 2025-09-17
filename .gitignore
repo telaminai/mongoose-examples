@@ -39,6 +39,6 @@ build/
 /.idea/
 /getting-started/five-minute-yaml-tutorial/run/data-out/processed-events
 /gettting-started/five-minute-yaml-tutorial/run/data-in/*.readPointer
-/getting-started/app-integration-tutorial/output/pnl-summary.jsonl
-/getting-started/app-integration-tutorial/run/input/tradesIn.readPointer
-/getting-started/app-integration-tutorial/run/output/
+/getting-started/app-integration-tutorial/data-out/pnl-summary.jsonl
+/getting-started/app-integration-tutorial/run/data-in/tradesIn.readPointer
+/getting-started/app-integration-tutorial/run/data-out/

@@ -14,6 +14,6 @@ rm -f ../data-in/*.readPointer
 
 # Remove all files from data-out directory
 echo "Removing all files from data-out directory..."
-rm -f data-out/*
+rm -f ../data-out/*
 
 echo "Cleanup completed successfully."

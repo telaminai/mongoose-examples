@@ -17,7 +17,7 @@ public class TradeFilter {
     private long lastTradeId;
     @Setter
     @Getter
-    private String pointerFileName = "./input/tradesIn.readPointer";
+    private String pointerFileName = "./data-in/tradesIn.readPointer";
 
     @Initialise
     public void initialise() {
