@@ -1,7 +1,6 @@
 package com.telamin.mongoose.example.pnl;
 
 import com.fluxtion.agrona.concurrent.BackoffIdleStrategy;
-import com.fluxtion.agrona.concurrent.SleepingMillisIdleStrategy;
 import com.fluxtion.runtime.annotations.Start;
 import com.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 import com.fluxtion.runtime.node.ObjectEventHandlerNode;
@@ -31,25 +30,25 @@ public class DataGeneratorServer {
         cfg.setCustomHandler(new DataGenerator());
         cfg.setName("data-gen");
 
-
         // trade sink
         FileMessageSink fileSinkTrades = new FileMessageSink();
         fileSinkTrades.setFilename(INPUT_TRADES_JSONL);
-        var sinkConfigTrades = EventSinkConfig.<MessageSink<?>>builder()
+        var sinkConfigTrades = EventSinkConfig.builder()
                 .instance(fileSinkTrades)
                 .valueMapper(DataMappers::toJson)
                 .name("pnl-sink")
                 .build();
 
-
+        // mid price sink
         FileMessageSink fileSinkMidPrice = new FileMessageSink();
         fileSinkMidPrice.setFilename(INPUT_MID_RATE_JSONL);
-        var sinkConfigMidPrice = EventSinkConfig.<MessageSink<?>>builder()
+        var sinkConfigMidPrice = EventSinkConfig.builder()
                 .instance(fileSinkMidPrice)
                 .valueMapper(DataMappers::toJson)
                 .name("midPrice-sink")
                 .build();
 
+        //thread config for the data generator
         var threadConfig = ThreadConfig.builder()
                 .agentName("data-gen-agent")
                 .idleStrategy(new BackoffIdleStrategy())
