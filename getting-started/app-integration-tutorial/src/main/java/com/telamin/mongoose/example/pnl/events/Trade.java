@@ -9,7 +9,7 @@ package com.telamin.mongoose.example.pnl.events;
 import com.telamin.mongoose.example.pnl.refdata.Instrument;
 import com.telamin.mongoose.example.pnl.refdata.Symbol;
 
-public record Trade(Symbol symbol, double dealtVolume, double contraVolume) {
+public record Trade(Symbol symbol, long id, double dealtVolume, double contraVolume) {
 
     public Instrument dealtInstrument() {
         return symbol.dealtInstrument();

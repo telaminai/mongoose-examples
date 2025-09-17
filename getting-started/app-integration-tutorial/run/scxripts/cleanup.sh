@@ -10,7 +10,7 @@ echo "Cleaning up Mongoose data files..."
 
 # Delete all *.readPointer files in data-in directory
 echo "Deleting *.readPointer files from data-in directory..."
-rm -f data-in/*.readPointer
+rm -f ../data-in/*.readPointer
 
 # Remove all files from data-out directory
 echo "Removing all files from data-out directory..."

@@ -17,6 +17,7 @@ import com.telamin.mongoose.connector.file.FileEventSource;
 import com.telamin.mongoose.connector.file.FileMessageSink;
 import com.telamin.mongoose.connector.memory.InMemoryEventSource;
 import com.telamin.mongoose.example.pnl.calculator.PnlSummaryCalc;
+import com.telamin.mongoose.example.pnl.calculator.TradeFilter;
 import com.telamin.mongoose.example.pnl.calculator.TradeLegToPositionAggregate;
 import com.telamin.mongoose.example.pnl.events.MidPrice;
 import com.telamin.mongoose.example.pnl.events.MtmInstrument;
@@ -41,7 +42,7 @@ public class PnlExampleMain {
     public static final String EOB_TRADE_KEY = "eob";
     private static InMemoryEventSource<MidPrice> priceFeed;
     private static InMemoryEventSource<MtmInstrument> mtmFeed;
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+
 
     public static void main(String[] args) throws InterruptedException {
         var mongooseConfigBuilder = MongooseServerConfig.builder();
@@ -51,25 +52,18 @@ public class PnlExampleMain {
         buildSinks(mongooseConfigBuilder);
 
         MongooseServer.bootServer(mongooseConfigBuilder.build());
-
-        sendData();
-    }
-
-    private static void sendData() throws InterruptedException {
-        //send some events
-        TimeUnit.SECONDS.sleep(1);
-        mtmFeed.offer(new MtmInstrument(EUR));
     }
 
     private static void buildHandlerLogic(MongooseServerConfig.Builder mongooseConfigBuilder){
         PnlSummaryCalc pnlSummaryCalc = new PnlSummaryCalc();
+        TradeFilter tradeFilter = new TradeFilter();
 
         EventProcessor<?> processor = (EventProcessor) DataFlow.subscribe(Trade.class)
-//                .peek(trade -> System.out.println("Received trade: " + PnlExampleMain.toJson(trade)))
                 .flatMapFromArray(Trade::tradeLegs, EOB_TRADE_KEY)
                 .groupBy(TradeLeg::instrument, TradeLegToPositionAggregate::new)
                 .publishTriggerOverride(pnlSummaryCalc)
                 .map(pnlSummaryCalc::calcMtmAndUpdateSummary)
+                .filter(tradeFilter::publishPnlResult)
                 .sink("pnl-sink")
                 .build();
 
@@ -85,9 +79,10 @@ public class PnlExampleMain {
         FileEventSource priceFeed = new FileEventSource();
         priceFeed.setFilename("./input/midRate.jsonl");
         priceFeed.setReadStrategy(ReadStrategy.EARLIEST);
+        priceFeed.setCacheEventLog(true);
         EventFeedConfig<?> pricesFeedConfig = EventFeedConfig.<String>builder()
                 .instance(priceFeed)
-                .valueMapper(row -> PnlExampleMain.toObject(row, MidPrice.class))
+                .valueMapper(row -> DataMappers.toObject(row, MidPrice.class))
                 .broadcast(true)
                 .name("prices")
                 .agent("feeds-agent", new SleepingMillisIdleStrategy())
@@ -95,9 +90,11 @@ public class PnlExampleMain {
 
         FileEventSource tradesFeed = new FileEventSource();
         tradesFeed.setFilename("./input/trades.jsonl");
+        tradesFeed.setReadStrategy(ReadStrategy.EARLIEST);
+
         EventFeedConfig<?> tradesFeedConfig = EventFeedConfig.<String>builder()
                 .instance(tradesFeed)
-                .valueMapper(row -> PnlExampleMain.toObject(row, Trade.class))
+                .valueMapper(row -> DataMappers.toObject(row, Trade.class))
                 .broadcast(true)
                 .name("trades")
                 .agent("feeds-agent", new SleepingMillisIdleStrategy())
@@ -123,26 +120,11 @@ public class PnlExampleMain {
 
         EventSinkConfig<MessageSink<?>> sinkConfig = EventSinkConfig.<MessageSink<?>>builder()
                 .instance(fileSink)
-                .valueMapper(PnlExampleMain::toJson)
+                .valueMapper(DataMappers::toJson)
                 .name("pnl-sink")
                 .build();
 
         mongooseServerConfig.addEventSink(sinkConfig);
     }
 
-    public static String toJson(Object o)  {
-        try {
-            return objectMapper.writeValueAsString(o);
-        } catch (JsonProcessingException e) {
-            return null;
-        }
-    }
-
-    public static <T>  T toObject(String charSequence, Class<T> clazz){
-        try {
-            return objectMapper.readValue(charSequence, clazz);
-        } catch (JsonProcessingException e) {
-            return null;
-        }
-    }
 }
