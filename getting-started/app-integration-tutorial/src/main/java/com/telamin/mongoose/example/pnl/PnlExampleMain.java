@@ -5,9 +5,8 @@
 
 package com.telamin.mongoose.example.pnl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fluxtion.agrona.concurrent.SleepingMillisIdleStrategy;
+import com.fluxtion.agrona.concurrent.SnowflakeIdGenerator;
 import com.fluxtion.compiler.builder.dataflow.DataFlow;
 import com.fluxtion.runtime.EventProcessor;
 import com.fluxtion.runtime.output.MessageSink;
@@ -23,11 +22,7 @@ import com.telamin.mongoose.example.pnl.events.MidPrice;
 import com.telamin.mongoose.example.pnl.events.MtmInstrument;
 import com.telamin.mongoose.example.pnl.events.Trade;
 import com.telamin.mongoose.example.pnl.events.TradeLeg;
-import org.checkerframework.checker.units.qual.C;
-
-import java.util.concurrent.TimeUnit;
-
-import static com.telamin.mongoose.example.pnl.refdata.RefData.*;
+import com.telamin.mongoose.example.pnl.helper.DataMappers;
 
 
 /**
@@ -48,6 +43,9 @@ public class PnlExampleMain {
 
 
     public static void main(String[] args) throws InterruptedException {
+
+        SnowflakeIdGenerator snowflakeIdGenerator = new SnowflakeIdGenerator(0);
+
         var mongooseConfigBuilder = MongooseServerConfig.builder();
 
         buildHandlerLogic(mongooseConfigBuilder);
@@ -55,6 +53,9 @@ public class PnlExampleMain {
         buildSinks(mongooseConfigBuilder);
 
         MongooseServer.bootServer(mongooseConfigBuilder.build());
+
+        DataGeneratorServer dataGeneratorServer = new DataGeneratorServer();
+        dataGeneratorServer.startFilePublish();
     }
 
     private static void buildHandlerLogic(MongooseServerConfig.Builder mongooseConfigBuilder){
@@ -71,18 +72,23 @@ public class PnlExampleMain {
                 .build();
 
         EventProcessorConfig<EventProcessor<?>> eventProcessorConfig = EventProcessorConfig.builder()
-                .name("filter-processor")
+                .name("pnl-processor")
                 .handler(processor)
                 .build();
 
+        var threadConfig = ThreadConfig.builder()
+                .agentName("pnl-agent")
+                .idleStrategy(new SleepingMillisIdleStrategy(1))
+                .build();
+
         mongooseConfigBuilder.addProcessor("pnl-agent", eventProcessorConfig);
+        mongooseConfigBuilder.addThread(threadConfig);
     }
 
     private static void buildFeeds(MongooseServerConfig.Builder mongooseServerConfig) {
         FileEventSource priceFeed = new FileEventSource();
         priceFeed.setFilename(INPUT_MID_RATE_JSONL);
         priceFeed.setReadStrategy(ReadStrategy.EARLIEST);
-        priceFeed.setCacheEventLog(true);
         EventFeedConfig<?> pricesFeedConfig = EventFeedConfig.<String>builder()
                 .instance(priceFeed)
                 .valueMapper(row -> DataMappers.toObject(row, MidPrice.class))
