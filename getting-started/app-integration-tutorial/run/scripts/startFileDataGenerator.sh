@@ -23,4 +23,4 @@ if [ ! -d "data-in" ]; then
 fi
 
 # Run the fat jar with the system property mongooseServer.config.file set to appConfig.yml
-java -DmongooseServer.config.file=app-config/file_data_generator_config.yml -Djava.util.logging.config.file=logging.properties -jar ../target/app-integration-tutorial.jar
+java -DmongooseServer.config.file=app-config/fileDataGenerator_config.yml -Djava.util.logging.config.file=logging.properties -jar ../target/app-integration-tutorial.jar
