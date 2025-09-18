@@ -9,11 +9,14 @@ cd "$SCRIPT_DIR"
 echo "Cleaning up Mongoose data files..."
 
 # Delete all *.readPointer files in data-in directory
-echo "Deleting *.readPointer files from data-in directory..."
-rm -f ../data-in/*.readPointer
+echo "Deleting all files from data-in directory..."
+rm -f ../data-in/*
 
 # Remove all files from data-out directory
 echo "Removing all files from data-out directory..."
 rm -f ../data-out/*
+
+echo removing jar
+rm ../../target/*.jar
 
 echo "Cleanup completed successfully."
