@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-package com.telamin.mongoose.example.pnl;
+package com.telamin.mongoose.example.pnl.server;
 
 import com.telamin.mongoose.connector.memory.InMemoryEventSource;
 import com.telamin.mongoose.example.pnl.events.MtmInstrument;

@@ -6,7 +6,7 @@ import com.fluxtion.runtime.annotations.builder.FluxtionIgnore;
 import com.fluxtion.runtime.dataflow.groupby.GroupBy;
 import com.fluxtion.runtime.event.Signal;
 import com.telamin.mongoose.example.pnl.events.PnlSummary;
-import com.telamin.mongoose.example.pnl.PnlExampleMain;
+import com.telamin.mongoose.example.pnl.server.PnlExampleMain;
 import com.telamin.mongoose.example.pnl.refdata.Instrument;
 import lombok.Getter;
 

@@ -15,10 +15,10 @@ eventSinks:
 # --------- EVENT HANDLERS BEGIN CONFIG ---------
 eventHandlers:
   - agentName: processor-agent
-    idleStrategy:
+    idleStrategy: !!com.fluxtion.agrona.concurrent.BackoffIdleStrategy {}
     eventHandlers:
       data-generator-processor:
         customHandler: !!com.telamin.mongoose.example.pnl.DataGeneratorProcessor
-          pricePublishSleep: 10
+          pricePublishSleep: 500
           tradePublishSleep: 1_000
 # --------- EVENT HANDLERS END CONFIG ---------
