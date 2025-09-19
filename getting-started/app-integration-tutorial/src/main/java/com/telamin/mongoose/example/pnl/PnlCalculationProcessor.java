@@ -7,12 +7,18 @@ import com.telamin.mongoose.example.pnl.calculator.TradeFilter;
 import com.telamin.mongoose.example.pnl.calculator.TradeLegToPositionAggregate;
 import com.telamin.mongoose.example.pnl.events.Trade;
 import com.telamin.mongoose.example.pnl.events.TradeLeg;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.function.Supplier;
 
 import static com.telamin.mongoose.example.pnl.server.PnlExampleMain.EOB_TRADE_KEY;
 
 public class PnlCalculationProcessor implements Supplier<EventProcessor<?>> {
+
+    @Getter
+    @Setter
+    private String sinkId = "pnl-sink";
 
     @Override
     public EventProcessor<?> get() {
@@ -25,8 +31,9 @@ public class PnlCalculationProcessor implements Supplier<EventProcessor<?>> {
                 .publishTriggerOverride(pnlSummaryCalc)
                 .map(pnlSummaryCalc::calcMtmAndUpdateSummary)
                 .filter(tradeFilter::publishPnlResult)
-                .sink("pnl-sink")
+                .sink(sinkId)
                 .build();
+
         return processor;
     }
 }
