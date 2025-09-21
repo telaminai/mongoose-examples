@@ -5,8 +5,7 @@
 
 package com.telamin.mongoose.example.pnl.calculator;
 
-
-import com.fluxtion.runtime.annotations.OnEventHandler;
+import com.telamin.fluxtion.runtime.annotations.OnEventHandler;
 import com.telamin.mongoose.example.pnl.events.MidPrice;
 import com.telamin.mongoose.example.pnl.events.MtmInstrument;
 import com.telamin.mongoose.example.pnl.refdata.Instrument;

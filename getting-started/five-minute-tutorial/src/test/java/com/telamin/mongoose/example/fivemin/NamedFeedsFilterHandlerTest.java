@@ -1,6 +1,6 @@
 package com.telamin.mongoose.example.fivemin;
 
-import com.fluxtion.runtime.output.MessageSink;
+import com.telamin.fluxtion.runtime.output.MessageSink;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

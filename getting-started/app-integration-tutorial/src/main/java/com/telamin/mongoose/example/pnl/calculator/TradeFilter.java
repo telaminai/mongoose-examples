@@ -1,8 +1,8 @@
 package com.telamin.mongoose.example.pnl.calculator;
 
 import com.fluxtion.agrona.IoUtil;
-import com.fluxtion.runtime.annotations.Initialise;
-import com.fluxtion.runtime.annotations.OnEventHandler;
+import com.telamin.fluxtion.runtime.annotations.Initialise;
+import com.telamin.fluxtion.runtime.annotations.OnEventHandler;
 import com.telamin.mongoose.example.pnl.events.Trade;
 import lombok.Getter;
 import lombok.Setter;

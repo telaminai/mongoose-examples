@@ -2,6 +2,7 @@
   <configuration default="false" name="PnlExampleMain" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="com.telamin.mongoose.example.pnl.server.PnlExampleMain" />
     <module name="app-integration-tutorial" />
+    <option name="VM_PARAMETERS" value="--add-opens java.base/jdk.internal.misc=ALL-UNNAMED" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/getting-started/app-integration-tutorial/run" />
     <extension name="coverage">
       <pattern>

@@ -6,7 +6,7 @@
 package com.telamin.mongoose.example.service;
 
 import com.fluxtion.agrona.concurrent.Agent;
-import com.fluxtion.runtime.lifecycle.Lifecycle;
+import com.telamin.fluxtion.runtime.lifecycle.Lifecycle;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;

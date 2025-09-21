@@ -1,8 +1,8 @@
 package com.telamin.mongoose.example.streamprog;
 
 import com.fluxtion.agrona.concurrent.BusySpinIdleStrategy;
-import com.fluxtion.compiler.builder.dataflow.DataFlow;
-import com.fluxtion.runtime.EventProcessor;
+import com.telamin.fluxtion.builder.DataFlowBuilder;
+import com.telamin.fluxtion.runtime.DataFlow;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.EventFeedConfig;
 import com.telamin.mongoose.config.EventProcessorConfig;
@@ -31,12 +31,12 @@ public class StreamProgrammingTutorial {
      */
     public static void main(String[] args) {
         //build data stream processor subscribing to prices feed, with a simple map function and console output
-        EventProcessor<?> processor = (EventProcessor) DataFlow.subscribeToFeed("prices", String.class)
+        DataFlow processor = DataFlowBuilder.subscribeToFeed("prices", String.class)
                 .map(String::toUpperCase)
                 .console("Hello, {}")
                 .build();
 
-        EventProcessorConfig<EventProcessor<?>> eventProcessorConfig = EventProcessorConfig.builder()
+        EventProcessorConfig<DataFlow> eventProcessorConfig = EventProcessorConfig.builder()
                 .name("filter-processor")
                 .handler(processor)
                 .build();

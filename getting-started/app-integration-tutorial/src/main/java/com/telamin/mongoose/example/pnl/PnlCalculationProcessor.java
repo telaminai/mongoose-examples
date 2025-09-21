@@ -1,7 +1,7 @@
 package com.telamin.mongoose.example.pnl;
 
-import com.fluxtion.compiler.builder.dataflow.DataFlow;
-import com.fluxtion.runtime.EventProcessor;
+import com.telamin.fluxtion.builder.DataFlowBuilder;
+import com.telamin.fluxtion.runtime.DataFlow;
 import com.telamin.mongoose.example.pnl.calculator.PnlSummaryCalc;
 import com.telamin.mongoose.example.pnl.calculator.TradeFilter;
 import com.telamin.mongoose.example.pnl.calculator.TradeLegToPositionAggregate;
@@ -14,18 +14,18 @@ import java.util.function.Supplier;
 
 import static com.telamin.mongoose.example.pnl.server.PnlExampleMain.EOB_TRADE_KEY;
 
-public class PnlCalculationProcessor implements Supplier<EventProcessor<?>> {
+public class PnlCalculationProcessor implements Supplier<DataFlow> {
 
     @Getter
     @Setter
     private String sinkId = "pnl-sink";
 
     @Override
-    public EventProcessor<?> get() {
+    public DataFlow get() {
         PnlSummaryCalc pnlSummaryCalc = new PnlSummaryCalc();
         TradeFilter tradeFilter = new TradeFilter();
 
-        EventProcessor<?> processor = (EventProcessor) DataFlow.subscribe(Trade.class)
+        DataFlow processor = DataFlowBuilder.subscribe(Trade.class)
                 .flatMapFromArray(Trade::tradeLegs, EOB_TRADE_KEY)
                 .groupBy(TradeLeg::instrument, TradeLegToPositionAggregate::new)
                 .publishTriggerOverride(pnlSummaryCalc)

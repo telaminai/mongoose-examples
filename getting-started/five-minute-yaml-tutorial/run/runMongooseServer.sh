@@ -19,4 +19,4 @@ if [ ! -d "data-out" ]; then
 fi
 
 # Run the fat jar with the system property mongooseServer.config.file set to appConfig.yml
-java -DmongooseServer.config.file=appConfig.yml -Djava.util.logging.config.file=logging.properties -jar ../target/five-minute-yaml-tutorial-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -DmongooseServer.config.file=appConfig.yml --add-opens java.base/jdk.internal.misc=ALL-UNNAMED -Djava.util.logging.config.file=logging.properties -jar ../target/five-minute-yaml-tutorial-1.0-SNAPSHOT-jar-with-dependencies.jar

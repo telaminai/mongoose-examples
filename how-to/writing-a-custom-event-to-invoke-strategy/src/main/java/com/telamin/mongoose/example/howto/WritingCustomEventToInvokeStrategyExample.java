@@ -1,11 +1,10 @@
 package com.telamin.mongoose.example.howto;
 
-import com.fluxtion.runtime.DefaultEventProcessor;
-import com.fluxtion.runtime.StaticEventProcessor;
-import com.fluxtion.runtime.annotations.runtime.ServiceRegistered;
-import com.fluxtion.runtime.node.ObjectEventHandlerNode;
-import com.fluxtion.runtime.output.MessageSink;
-import com.fluxtion.runtime.service.Service;
+import com.telamin.fluxtion.runtime.DataFlow;
+import com.telamin.fluxtion.runtime.DefaultEventProcessor;
+import com.telamin.fluxtion.runtime.annotations.runtime.ServiceRegistered;
+import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
+import com.telamin.fluxtion.runtime.output.MessageSink;
 import com.telamin.mongoose.MongooseEventHandler;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.*;
@@ -155,7 +154,7 @@ public class WritingCustomEventToInvokeStrategyExample {
     public static class CustomEventToInvokeStrategy extends AbstractEventToInvocationStrategy {
 
         @Override
-        protected void dispatchEvent(Object event, StaticEventProcessor eventProcessor) {
+        protected void dispatchEvent(Object event, DataFlow eventProcessor) {
             // Route String events to StringProcessor with transformation
             if (event instanceof String str && eventProcessor instanceof StringProcessor stringProc) {
                 // Transform: convert to uppercase
@@ -192,7 +191,7 @@ public class WritingCustomEventToInvokeStrategyExample {
         }
 
         @Override
-        protected boolean isValidTarget(StaticEventProcessor eventProcessor) {
+        protected boolean isValidTarget(DataFlow eventProcessor) {
             // Only accept processors that implement our marker interfaces
             return eventProcessor instanceof StringProcessor ||
                     eventProcessor instanceof NumberProcessor ||
@@ -286,7 +285,7 @@ public class WritingCustomEventToInvokeStrategyExample {
         public void init() {
             super.init();
             serviceRegistry.nodeRegistered(this, "numberProcessor");
-            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
+            serviceRegistry.getDataFlowContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @ServiceRegistered
@@ -335,7 +334,7 @@ public class WritingCustomEventToInvokeStrategyExample {
         public void init() {
             super.init();
             serviceRegistry.nodeRegistered(this, "genericProcessor");
-            serviceRegistry.getEventProcessorContext().subscribeToNamedFeed("custom-strategy-feed");
+            serviceRegistry.getDataFlowContext().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @ServiceRegistered

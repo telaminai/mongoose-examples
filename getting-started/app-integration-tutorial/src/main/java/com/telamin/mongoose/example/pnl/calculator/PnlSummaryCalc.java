@@ -1,10 +1,10 @@
 package com.telamin.mongoose.example.pnl.calculator;
 
-import com.fluxtion.runtime.annotations.OnEventHandler;
-import com.fluxtion.runtime.annotations.OnTrigger;
-import com.fluxtion.runtime.annotations.builder.FluxtionIgnore;
-import com.fluxtion.runtime.dataflow.groupby.GroupBy;
-import com.fluxtion.runtime.event.Signal;
+import com.telamin.fluxtion.runtime.annotations.OnEventHandler;
+import com.telamin.fluxtion.runtime.annotations.OnTrigger;
+import com.telamin.fluxtion.runtime.annotations.builder.FluxtionIgnore;
+import com.telamin.fluxtion.runtime.event.Signal;
+import com.telamin.fluxtion.runtime.flowfunction.groupby.GroupBy;
 import com.telamin.mongoose.example.pnl.events.PnlSummary;
 import com.telamin.mongoose.example.pnl.server.PnlExampleMain;
 import com.telamin.mongoose.example.pnl.refdata.Instrument;

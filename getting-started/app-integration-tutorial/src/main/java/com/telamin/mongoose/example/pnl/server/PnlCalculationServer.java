@@ -6,8 +6,8 @@
 package com.telamin.mongoose.example.pnl.server;
 
 import com.fluxtion.agrona.concurrent.SleepingMillisIdleStrategy;
-import com.fluxtion.runtime.EventProcessor;
-import com.fluxtion.runtime.output.MessageSink;
+import com.telamin.fluxtion.runtime.DataFlow;
+import com.telamin.fluxtion.runtime.output.MessageSink;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.*;
 import com.telamin.mongoose.connector.file.FileEventSource;
@@ -47,7 +47,7 @@ public class PnlCalculationServer {
 //                .sink("pnl-sink")
 //                .build();
 
-        EventProcessorConfig<EventProcessor<?>> eventProcessorConfig = EventProcessorConfig.builder()
+        EventProcessorConfig<DataFlow> eventProcessorConfig = EventProcessorConfig.builder()
                 .name("pnl-processor")
                 .handlerBuilder(new PnlCalculationProcessor())
 //                .handler(processor)

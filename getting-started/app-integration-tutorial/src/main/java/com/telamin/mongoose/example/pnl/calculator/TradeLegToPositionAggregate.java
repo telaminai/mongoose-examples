@@ -1,6 +1,6 @@
 package com.telamin.mongoose.example.pnl.calculator;
 
-import com.fluxtion.runtime.dataflow.aggregate.function.AbstractAggregateFlowFunction;
+import com.telamin.fluxtion.runtime.flowfunction.aggregate.function.AbstractAggregateFlowFunction;
 import com.telamin.mongoose.example.pnl.events.TradeLeg;
 
 public class TradeLegToPositionAggregate extends AbstractAggregateFlowFunction<TradeLeg, InstrumentPosMtm> {

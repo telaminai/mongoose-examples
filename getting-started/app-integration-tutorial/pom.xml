@@ -20,9 +20,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.fluxtion</groupId>
-            <artifactId>compiler</artifactId>
-            <version>9.7.14</version>
+            <groupId>com.telamin.fluxtion</groupId>
+            <artifactId>fluxtion-builder</artifactId>
+            <version>0.9.3</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
