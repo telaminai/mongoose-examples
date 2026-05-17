@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/telaminai/mongoose-examples/actions/workflows/ci.yml/badge.svg)](https://github.com/telaminai/mongoose-examples/actions/workflows/ci.yml)
 
-This is a Maven project that demonstrates how to write custom EventToInvokeStrategy implementations to control how events are dispatched from queues to StaticEventProcessor instances. The example shows how to:
+This is a Maven project that demonstrates how to write custom EventToInvokeStrategy implementations to control how events are dispatched from queues to DataFlow instances. The example shows how to:
 
 - Create custom EventToInvokeStrategy by extending AbstractEventToInvocationStrategy
 - Filter which processors can receive events using isValidTarget()
@@ -141,7 +141,7 @@ Mongoose maven dependency:
 public static class CustomEventToInvokeStrategy extends AbstractEventToInvocationStrategy {
 
     @Override
-    protected void dispatchEvent(Object event, StaticEventProcessor eventProcessor) {
+    protected void dispatchEvent(Object event, DataFlow eventProcessor) {
         // Route String events to StringProcessor with transformation
         if (event instanceof String str && eventProcessor instanceof StringProcessor stringProc) {
             // Transform: convert to uppercase
@@ -173,7 +173,7 @@ public static class CustomEventToInvokeStrategy extends AbstractEventToInvocatio
     }
 
     @Override
-    protected boolean isValidTarget(StaticEventProcessor eventProcessor) {
+    protected boolean isValidTarget(DataFlow eventProcessor) {
         // Only accept processors that implement our marker interfaces
         return eventProcessor instanceof StringProcessor ||
                eventProcessor instanceof NumberProcessor ||
@@ -331,13 +331,13 @@ Custom Strategy Benefits:
 ```java
 public static class FilterOnlyStrategy extends AbstractEventToInvocationStrategy {
     @Override
-    protected void dispatchEvent(Object event, StaticEventProcessor eventProcessor) {
+    protected void dispatchEvent(Object event, DataFlow eventProcessor) {
         // No transformation, just dispatch
         eventProcessor.onEvent(event);
     }
 
     @Override
-    protected boolean isValidTarget(StaticEventProcessor eventProcessor) {
+    protected boolean isValidTarget(DataFlow eventProcessor) {
         // Only accept specific processor types
         return eventProcessor instanceof StringProcessor;
     }
@@ -348,14 +348,14 @@ public static class FilterOnlyStrategy extends AbstractEventToInvocationStrategy
 ```java
 public static class NormalizingStrategy extends AbstractEventToInvocationStrategy {
     @Override
-    protected void dispatchEvent(Object event, StaticEventProcessor eventProcessor) {
+    protected void dispatchEvent(Object event, DataFlow eventProcessor) {
         // Transform all events to a normalized format
         String normalizedEvent = "NORMALIZED: " + event.toString();
         eventProcessor.onEvent(normalizedEvent);
     }
 
     @Override
-    protected boolean isValidTarget(StaticEventProcessor eventProcessor) {
+    protected boolean isValidTarget(DataFlow eventProcessor) {
         // Accept all processors
         return true;
     }

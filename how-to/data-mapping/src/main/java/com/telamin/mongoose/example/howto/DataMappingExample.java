@@ -1,6 +1,6 @@
 package com.telamin.mongoose.example.howto;
 
-import com.fluxtion.runtime.node.ObjectEventHandlerNode;
+import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.telamin.mongoose.config.EventFeedConfig;
 import com.telamin.mongoose.config.EventProcessorConfig;
 import com.telamin.mongoose.config.EventProcessorGroupConfig;
