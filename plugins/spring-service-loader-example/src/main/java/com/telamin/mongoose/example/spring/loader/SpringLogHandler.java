@@ -7,11 +7,6 @@ import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
  *
  * <p>{@code prefix} is injected via Spring bean-property setter — the XML's
  * {@code <property name="prefix" value="..."/>} ends up here.
- *
- * <p>The processor is dynamically added by svc-loader-spring; it does not get
- * the automatic feed subscriptions that statically-registered processors
- * receive at boot. {@link #start()} therefore explicitly subscribes this
- * handler's processor to the in-memory feed by name.
  */
 public class SpringLogHandler extends ObjectEventHandlerNode {
 
@@ -21,11 +16,6 @@ public class SpringLogHandler extends ObjectEventHandlerNode {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
-    }
-
-    @Override
-    public void start() {
-        getContext().subscribeToNamedFeed(FEED_NAME);
     }
 
     @Override
