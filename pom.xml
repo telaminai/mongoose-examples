@@ -58,6 +58,16 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.telamin.fluxtion</groupId>
+                <artifactId>fluxtion-builder</artifactId>
+                <version>0.9.33</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <pluginManagement>
             <plugins>

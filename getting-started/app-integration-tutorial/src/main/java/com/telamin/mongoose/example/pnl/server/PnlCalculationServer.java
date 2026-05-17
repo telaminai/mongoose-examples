@@ -5,7 +5,6 @@
 
 package com.telamin.mongoose.example.pnl.server;
 
-import com.fluxtion.agrona.concurrent.SleepingMillisIdleStrategy;
 import com.telamin.fluxtion.runtime.DataFlow;
 import com.telamin.fluxtion.runtime.output.MessageSink;
 import com.telamin.mongoose.MongooseServer;
@@ -18,6 +17,7 @@ import com.telamin.mongoose.example.pnl.events.MidPrice;
 import com.telamin.mongoose.example.pnl.events.MtmInstrument;
 import com.telamin.mongoose.example.pnl.events.Trade;
 import com.telamin.mongoose.example.pnl.helper.DataMappers;
+import org.agrona.concurrent.SleepingMillisIdleStrategy;
 
 import static com.telamin.mongoose.example.pnl.server.PnlExampleMain.*;
 
