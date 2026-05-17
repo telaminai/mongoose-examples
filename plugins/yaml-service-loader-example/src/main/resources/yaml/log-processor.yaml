@@ -1,6 +1,7 @@
+# Event-processor topology loaded by svc-loader-yaml at server boot.
+# `namedNodes` maps a node id to its instance; the `!!` tag picks the class
+# to instantiate and following properties are bean-set on it.
 namedNodes:
   logHandler: !!com.telamin.mongoose.example.yaml.loader.YamlLogHandler
-    prefix: "CUSTOM-YAML-PREFIX: "
+    prefix: "YAML-LOADED-HANDLER:"
 enableAudit: true
-# Try adding an explicit feed subscription if possible? 
-# The plugin doesn't seem to support it in the YAML schema I saw.

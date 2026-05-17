@@ -13,8 +13,8 @@
     <artifactId>yaml-service-loader-example</artifactId>
     <name>mongoose-examples :: plugins :: yaml-service-loader-example</name>
     <description>
-        Example demonstrating the YAML Service Loader plugin.
-        Loads event processors from YAML configuration files.
+        Loads an event processor from a YAML config at server boot using svc-loader-yaml,
+        then feeds it events from an in-memory feed.
     </description>
 
     <properties>
@@ -27,6 +27,12 @@
             <artifactId>svc-loader-yaml</artifactId>
             <version>${plugins.version}</version>
         </dependency>
+        <!--
+            SnakeYAML 2.x rejects `!!fully.qualified.ClassName` global tags by
+            default. Pinning 1.33 keeps the YAML below loadable on snapshots
+            that haven't picked up the loader-side TagInspector fix yet.
+            Remove this pin once svc-loader-yaml >= 0.2.9 is in your classpath.
+        -->
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
@@ -36,16 +42,24 @@
 
     <build>
         <plugins>
+            <!--
+                exec:exec forks a JVM so the agrona add-opens JVM flags actually
+                take effect. With exec:java the args here would be passed to
+                main(String[]) and the JVM flags would be silently ignored.
+            -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.6.3</version>
                 <configuration>
-                    <mainClass>com.telamin.mongoose.example.yaml.loader.YamlServiceLoaderExample</mainClass>
+                    <executable>java</executable>
                     <arguments>
                         <argument>--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED</argument>
                         <argument>--add-opens=java.base/java.lang.reflect=ALL-UNNAMED</argument>
                         <argument>--add-opens=java.base/sun.nio.ch=ALL-UNNAMED</argument>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.telamin.mongoose.example.yaml.loader.YamlServiceLoaderExample</argument>
                     </arguments>
                 </configuration>
             </plugin>

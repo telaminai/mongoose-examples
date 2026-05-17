@@ -1,25 +1,36 @@
 package com.telamin.mongoose.example.yaml.loader;
 
 import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
-import lombok.extern.log4j.Log4j2;
 
 /**
- * A simple event handler that logs received events.
+ * Event handler instantiated from log-processor.yaml by svc-loader-yaml.
+ *
+ * <p>{@code prefix} is injected via SnakeYAML bean-setter — the YAML's
+ * {@code prefix: "..."} entry under the {@code logHandler} node ends up here.
+ *
+ * <p>The processor is dynamically added by svc-loader-yaml; it does not get
+ * the automatic feed subscriptions that statically-registered processors
+ * receive at boot. {@link #start()} therefore explicitly subscribes this
+ * handler's processor to the in-memory feed by name.
  */
-@Log4j2
 public class YamlLogHandler extends ObjectEventHandlerNode {
 
-    private String prefix = "YAML-EVENT: ";
+    public static final String FEED_NAME = "yamlLoader";
+
+    private String prefix = "YAML-LOADED-HANDLER:";
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
     @Override
+    public void start() {
+        getContext().subscribeToNamedFeed(FEED_NAME);
+    }
+
+    @Override
     protected boolean handleEvent(Object event) {
-        String msg = prefix + " received event: " + event;
-        System.out.println(msg);
-        log.info(msg);
+        System.out.println(prefix + " " + event);
         return true;
     }
 }

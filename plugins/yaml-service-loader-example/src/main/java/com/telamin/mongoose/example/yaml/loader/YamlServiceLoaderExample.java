@@ -4,49 +4,50 @@ import com.fluxtion.dataflow.serverplugin.loader.yaml.EventHandlerLoader;
 import com.fluxtion.dataflow.serverplugin.loader.yaml.EventHandlerLoader.EventLoadAtStartup;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.EventFeedConfig;
-import com.telamin.mongoose.config.EventProcessorConfig;
 import com.telamin.mongoose.config.MongooseServerConfig;
 import com.telamin.mongoose.config.ServiceConfig;
 import com.telamin.mongoose.connector.memory.InMemoryEventSource;
 import org.agrona.concurrent.SleepingMillisIdleStrategy;
 
-import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Set;
 
 /**
- * Example demonstrating how to use the YAML Service Loader plugin to load
- * event processors from a YAML configuration file.
+ * Boots a Mongoose server that loads an event-processor topology from a YAML
+ * file using svc-loader-yaml, then publishes a few events from an in-memory
+ * feed so the processor (a {@link YamlLogHandler}) can log them.
+ *
+ * <p>The feed is named {@code yamlLoader} to match the loader's default
+ * processor group; with {@code broadcast=true} it would reach every group
+ * regardless, but matching the name keeps the wiring obvious.
  */
 public class YamlServiceLoaderExample {
 
-    public static void main(String[] args) throws InterruptedException {
-        // 1. Locate the YAML configuration file
-        URL yamlUrl = YamlServiceLoaderExample.class.getResource("/yaml/log-processor.yaml");
-        if (yamlUrl == null) {
-            throw new RuntimeException("Could not find /yaml/log-processor.yaml");
-        }
-        String yamlPath = new File(yamlUrl.getPath()).getAbsolutePath();
+    private static final String YAML_RESOURCE = "/yaml/log-processor.yaml";
+
+    public static void main(String[] args) throws InterruptedException, URISyntaxException {
+        Path yamlPath = locateYaml();
         System.out.println("Using YAML config from: " + yamlPath);
 
-        // 2. Configure the YAML loader service
-        EventHandlerLoader yamlLoader = new EventHandlerLoader();
         EventLoadAtStartup loadConfig = new EventLoadAtStartup();
-        loadConfig.setYamlFile(yamlPath);
+        loadConfig.setYamlFile(yamlPath.toString());
         loadConfig.setCompile(true);
+
+        EventHandlerLoader yamlLoader = new EventHandlerLoader();
         yamlLoader.setLoadAtStartup(Set.of(loadConfig));
 
-        // 3. Setup a simple in-memory feed to send events to
         InMemoryEventSource<String> eventSource = new InMemoryEventSource<>();
         EventFeedConfig<?> feedConfig = EventFeedConfig.builder()
                 .instance(eventSource)
-                .name("yamlLoader") // This name matches the default group in yamlLoader if not specified
+                .name("yamlLoader")
                 .agent("producer-agent", new SleepingMillisIdleStrategy(1))
                 .broadcast(true)
                 .build();
 
-        // 4. Build and boot the Mongoose server
-        ServiceConfig<EventHandlerLoader> yamlLoaderConfig = ServiceConfig.<EventHandlerLoader>builder()
+        ServiceConfig<EventHandlerLoader> loaderService = ServiceConfig.<EventHandlerLoader>builder()
                 .service(yamlLoader)
                 .serviceClass(EventHandlerLoader.class)
                 .name("yamlLoaderService")
@@ -54,21 +55,29 @@ public class YamlServiceLoaderExample {
 
         MongooseServerConfig serverConfig = MongooseServerConfig.builder()
                 .addEventFeed(feedConfig)
-                .addService(yamlLoaderConfig)
+                .addService(loaderService)
                 .build();
 
         MongooseServer server = MongooseServer.bootServer(serverConfig);
-
         try {
-            System.out.println("Server booted. Sending events...");
-            Thread.sleep(2000);
+            Thread.sleep(1_500); // give the loader time to install the processor
+            System.out.println("Sending events...");
             for (int i = 0; i < 5; i++) {
                 eventSource.offer("Event #" + i);
                 Thread.sleep(200);
             }
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } finally {
             server.stop();
         }
+    }
+
+    private static Path locateYaml() throws URISyntaxException {
+        URL url = YamlServiceLoaderExample.class.getResource(YAML_RESOURCE);
+        if (url == null) {
+            throw new IllegalStateException("Could not find classpath resource " + YAML_RESOURCE);
+        }
+        // toURI handles spaces and non-ASCII characters correctly; new File(url.getPath()) does not.
+        return Paths.get(url.toURI());
     }
 }
