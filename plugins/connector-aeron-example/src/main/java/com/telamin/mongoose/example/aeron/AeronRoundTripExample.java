@@ -4,8 +4,8 @@
  */
 package com.telamin.mongoose.example.aeron;
 
-import com.fluxtion.server.plugin.connector.aeron.AeronArchiveEventSource;
-import com.fluxtion.server.plugin.connector.aeron.AeronMessageSink;
+import com.telamin.mongoose.plugin.connector.aeron.AeronArchiveEventSource;
+import com.telamin.mongoose.plugin.connector.aeron.AeronMessageSink;
 import com.telamin.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.telamin.fluxtion.runtime.output.MessageSink;

@@ -1,7 +1,7 @@
 package com.telamin.mongoose.example.spring.loader;
 
-import com.fluxtion.dataflow.serverplugin.loader.spring.SpringEventHandlerLoader;
-import com.fluxtion.dataflow.serverplugin.loader.spring.SpringEventHandlerLoader.EventSpringFile;
+import com.telamin.mongoose.plugin.loader.spring.SpringEventHandlerLoader;
+import com.telamin.mongoose.plugin.loader.spring.SpringEventHandlerLoader.EventSpringFile;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.EventFeedConfig;
 import com.telamin.mongoose.config.MongooseServerConfig;

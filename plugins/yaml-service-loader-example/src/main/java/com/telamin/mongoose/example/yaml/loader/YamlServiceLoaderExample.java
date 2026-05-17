@@ -1,7 +1,7 @@
 package com.telamin.mongoose.example.yaml.loader;
 
-import com.fluxtion.dataflow.serverplugin.loader.yaml.EventHandlerLoader;
-import com.fluxtion.dataflow.serverplugin.loader.yaml.EventHandlerLoader.EventLoadAtStartup;
+import com.telamin.mongoose.plugin.loader.yaml.EventHandlerLoader;
+import com.telamin.mongoose.plugin.loader.yaml.EventHandlerLoader.EventLoadAtStartup;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.EventFeedConfig;
 import com.telamin.mongoose.config.MongooseServerConfig;

@@ -24,7 +24,7 @@
     </description>
 
     <properties>
-        <plugins.version>0.2.11</plugins.version>
+        <plugins.version>0.2.12-SNAPSHOT</plugins.version>
     </properties>
 
     <dependencies>
