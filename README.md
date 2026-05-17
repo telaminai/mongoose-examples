@@ -31,6 +31,7 @@ These examples range from simple "getting started" tutorials to more complex cas
 - [Message Sink Example](plugins/message-sink-example) - Illustrates how to create a custom message sink by extending the AbstractMessageSink class, with configurable formatting options for console output.
 - [Service Plugin Example](plugins/service-plugin-example) - Demonstrates how to create custom service plugins that can be registered with Mongoose server, including both simple lifecycle services and worker services that run background tasks.
 - [YAML Service Loader Example](plugins/yaml-service-loader-example) - Demonstrates how to use the YAML Service Loader plugin to dynamically load and configure event processors from YAML files at server startup.
+- [Spring Service Loader Example](plugins/spring-service-loader-example) - Demonstrates how to use the Spring Service Loader plugin to dynamically load and configure event processors from Spring files at server startup.
 
 ### How-To Guides
 
