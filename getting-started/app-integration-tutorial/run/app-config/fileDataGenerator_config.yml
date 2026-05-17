@@ -15,7 +15,7 @@ eventSinks:
 # --------- EVENT HANDLERS BEGIN CONFIG ---------
 eventHandlers:
   - agentName: processor-agent
-    idleStrategy: !!com.fluxtion.agrona.concurrent.BackoffIdleStrategy {}
+    idleStrategy: !!org.agrona.concurrent.BackoffIdleStrategy {}
     eventHandlers:
       data-generator-processor:
         customHandler: !!com.telamin.mongoose.example.pnl.DataGeneratorProcessor

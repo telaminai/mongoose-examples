@@ -1,6 +1,5 @@
 package com.telamin.mongoose.example.pnl.server;
 
-import com.fluxtion.agrona.concurrent.BackoffIdleStrategy;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.EventProcessorConfig;
 import com.telamin.mongoose.config.EventSinkConfig;
@@ -9,6 +8,7 @@ import com.telamin.mongoose.config.ThreadConfig;
 import com.telamin.mongoose.connector.file.FileMessageSink;
 import com.telamin.mongoose.example.pnl.DataGeneratorProcessor;
 import com.telamin.mongoose.example.pnl.helper.DataMappers;
+import org.agrona.concurrent.BackoffIdleStrategy;
 
 import static com.telamin.mongoose.example.pnl.server.PnlExampleMain.INPUT_MID_RATE_JSONL;
 import static com.telamin.mongoose.example.pnl.server.PnlExampleMain.INPUT_TRADES_JSONL;

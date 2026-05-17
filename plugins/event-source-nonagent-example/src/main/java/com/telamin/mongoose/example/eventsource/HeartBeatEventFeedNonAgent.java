@@ -5,6 +5,7 @@
 
 package com.telamin.mongoose.example.eventsource;
 
+import com.telamin.fluxtion.runtime.annotations.Start;
 import com.telamin.mongoose.service.extension.AbstractEventSourceService;
 
 import java.util.concurrent.Executors;
@@ -27,7 +28,7 @@ public class HeartBeatEventFeedNonAgent extends AbstractEventSourceService<Heart
 
     private void heartbeat() {
         heartbeatEvent.setTimestamp(System.nanoTime());
-        System.out.println("publish " + heartbeatEvent);
+        System.out.println("publish " +heartbeatEvent);
         output.publish(heartbeatEvent);
     }
 }

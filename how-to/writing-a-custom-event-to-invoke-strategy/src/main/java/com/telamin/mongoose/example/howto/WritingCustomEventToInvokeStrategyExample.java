@@ -1,10 +1,11 @@
 package com.telamin.mongoose.example.howto;
 
-import com.telamin.fluxtion.runtime.DataFlow;
 import com.telamin.fluxtion.runtime.DefaultEventProcessor;
+import com.telamin.fluxtion.runtime.DataFlow;
 import com.telamin.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.telamin.fluxtion.runtime.output.MessageSink;
+import com.telamin.fluxtion.runtime.service.Service;
 import com.telamin.mongoose.MongooseEventHandler;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.*;
@@ -285,7 +286,7 @@ public class WritingCustomEventToInvokeStrategyExample {
         public void init() {
             super.init();
             serviceRegistry.nodeRegistered(this, "numberProcessor");
-            serviceRegistry.getDataFlowContext().subscribeToNamedFeed("custom-strategy-feed");
+            getSubscriptionManager().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @ServiceRegistered
@@ -334,7 +335,7 @@ public class WritingCustomEventToInvokeStrategyExample {
         public void init() {
             super.init();
             serviceRegistry.nodeRegistered(this, "genericProcessor");
-            serviceRegistry.getDataFlowContext().subscribeToNamedFeed("custom-strategy-feed");
+            getSubscriptionManager().subscribeToNamedFeed("custom-strategy-feed");
         }
 
         @ServiceRegistered

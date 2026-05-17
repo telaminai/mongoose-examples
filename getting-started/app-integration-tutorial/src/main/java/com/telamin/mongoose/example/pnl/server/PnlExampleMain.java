@@ -5,9 +5,6 @@
 
 package com.telamin.mongoose.example.pnl.server;
 
-import com.telamin.mongoose.connector.memory.InMemoryEventSource;
-import com.telamin.mongoose.example.pnl.events.MtmInstrument;
-
 
 public class PnlExampleMain {
 
@@ -15,9 +12,6 @@ public class PnlExampleMain {
     public static final String INPUT_TRADES_JSONL = "./data-in/trades.jsonl";
     public static final String INPUT_MID_RATE_JSONL = "./data-in/midRate.jsonl";
     public static final String OUTPUT_PNL_SUMMARY_JSONL = "./data-out/pnl-summary.jsonl";
-
-    private static InMemoryEventSource<MtmInstrument> mtmFeed;
-
 
     public static void main(String[] args) throws InterruptedException {
         PnlCalculationServer pnlCalculationServer = new PnlCalculationServer();

@@ -5,7 +5,7 @@
 
 package com.telamin.mongoose.example.service;
 
-import com.fluxtion.agrona.concurrent.SleepingMillisIdleStrategy;
+import org.agrona.concurrent.SleepingMillisIdleStrategy;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.EventFeedConfig;
 import com.telamin.mongoose.config.EventProcessorConfig;

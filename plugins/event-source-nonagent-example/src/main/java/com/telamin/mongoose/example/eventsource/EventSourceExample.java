@@ -1,5 +1,6 @@
 package com.telamin.mongoose.example.eventsource;
 
+import org.agrona.concurrent.SleepingMillisIdleStrategy;
 import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.EventFeedConfig;
