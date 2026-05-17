@@ -20,8 +20,9 @@ These examples range from simple "getting started" tutorials to more complex cas
 
 ### Getting Started
 
-- [Five Minute Tutorial](gettting-started/five-minute-tutorial) - A programmatic approach to configuring a Mongoose server with multiple named event feeds and selective event processing.
-- [Five Minute YAML Tutorial](gettting-started/five-minute-yaml-tutorial) - The same functionality as the Five Minute Tutorial, but using YAML configuration instead of programmatic configuration.
+- [Five Minute Tutorial](getting-started/five-minute-tutorial) - A programmatic approach to configuring a Mongoose server with multiple named event feeds and selective event processing.
+- [Five Minute YAML Tutorial](getting-started/five-minute-yaml-tutorial) - The same functionality as the Five Minute Tutorial, but using YAML configuration instead of programmatic configuration.
+- [Stream Programming Tutorial](getting-started/stream-programming-tutorial) - Demonstrates native Fluxtion DataFlow stream programming in Mongoose where lifecycle and feed subscriptions are handled automatically.
 
 ### Plugins
 
@@ -39,9 +40,9 @@ These examples range from simple "getting started" tutorials to more complex cas
 - [Handler Pipe](how-to/handler-pipe) - Shows how to use HandlerPipe for in-VM communication between handlers, enabling message passing patterns.
 - [Object Pool](how-to/object-pool) - Demonstrates zero-GC object pooling techniques for high-performance event processing with minimal garbage collection.
 - [Replay](how-to/replay) - Shows how to implement deterministic replay with ReplayRecord and the data-driven clock for testing and debugging.
-- [Scheduler processAsNewEventCycle](how-to/scheduler-processAsNewEventCycle) - Demonstrates re-entrant publishing with processAsNewEventCycle and SchedulerService.
 - [Core Pin](how-to/core-pin) - Shows how to pin agent threads to specific CPU cores for optimal performance in latency-sensitive applications.
 - [Writing a Custom Event to Invoke Strategy](how-to/writing-a-custom-event-to-invoke-strategy) - Demonstrates how to create custom EventToInvokeStrategy implementations for specialized event handling patterns.
+- [Scheduler processAsNewEventCycle](how-to/scheduler-processAsNewEventCycle) - Demonstrates re-entrant publishing with processAsNewEventCycle and SchedulerService.
 
 ## Prerequisites
 
@@ -79,3 +80,6 @@ Contributions to this repository are welcome! If you have an example or tutorial
 - [Mongoose GitHub Repository](https://github.com/telaminai/mongoose)
 - [Mongoose Project Homepage](https://telaminai.github.io/mongoose/)
 - [Mongoose Documentation](https://telaminai.github.io/mongoose/docs/)
+
+## Under construction 
+none

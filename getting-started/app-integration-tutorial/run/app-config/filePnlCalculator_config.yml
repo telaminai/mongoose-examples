@@ -1,0 +1,42 @@
+# --------- EVENT INPUT FEEDS BEGIN CONFIG ---------
+eventFeeds:
+  - name: midPrice-Feed
+    instance: !!com.telamin.mongoose.connector.file.FileEventSource
+      filename: ./data-in/midRate.jsonl
+      readStrategy: EARLIEST
+    broadcast: true
+    valueMapper: !!com.telamin.mongoose.example.pnl.helper.MapFromJson
+      targetType: com.telamin.mongoose.example.pnl.events.MidPrice
+    agentName: file-source-agent
+    idleStrategy: !!com.fluxtion.agrona.concurrent.BackoffIdleStrategy {}
+
+  - name: trade-Feed
+    instance: !!com.telamin.mongoose.connector.file.FileEventSource
+      filename: ./data-in/trades.jsonl
+      readStrategy: EARLIEST
+    broadcast: true
+    valueMapper: !!com.telamin.mongoose.example.pnl.helper.MapFromJson
+      targetType: com.telamin.mongoose.example.pnl.events.Trade
+    agentName: file-source-agent
+    idleStrategy: !!com.fluxtion.agrona.concurrent.BackoffIdleStrategy {}
+# --------- EVENT INPUT FEEDS END CONFIG ---------
+
+
+# --------- EVENT SINKS BEGIN CONFIG -------
+eventSinks:
+  - name: pnl-sink
+    instance: !!com.telamin.mongoose.connector.file.FileMessageSink
+      filename: data-out/pnl-summary.jsonl
+    valueMapper: !!com.telamin.mongoose.example.pnl.helper.MapToJson {}
+# --------- EVENT SINKS END CONFIG ---------
+
+# --------- EVENT HANDLERS BEGIN CONFIG ---------
+eventHandlers:
+  - agentName: processor-agent
+    idleStrategy: !!com.fluxtion.agrona.concurrent.BackoffIdleStrategy {}
+    eventHandlers:
+      pnlCalculator-processor:
+        eventHandlerBuilder: !!com.telamin.mongoose.example.pnl.PnlCalculationProcessor
+# --------- EVENT HANDLERS END CONFIG ---------
+
+
