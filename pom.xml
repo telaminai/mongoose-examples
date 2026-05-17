@@ -36,7 +36,8 @@
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mongoose.version>1.0.9-SNAPSHOT</mongoose.version>
+        <mongoose.version>1.0.9</mongoose.version>
+        <plugins.version>0.2.11</plugins.version>
         <lombok.version>1.18.42</lombok.version>
     </properties>
 
@@ -93,5 +94,26 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>repsy-fluxtion-public</id>
+            <name>DataFlow public repo</name>
+            <url>https://repo.repsy.io/mvn/fluxtion/fluxtion-public</url>
+        </repository>
+        <repository>
+            <id>repsy-fluxtion-private</id>
+            <name>DataFlow private repo</name>
+            <url>https://repo.repsy.io/mvn/fluxtion/fluxtion-private</url>
+        </repository>
+    </repositories>
 
 </project>

@@ -17,10 +17,6 @@
         then feeds it events from an in-memory feed.
     </description>
 
-    <properties>
-        <plugins.version>0.2.8-SNAPSHOT</plugins.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.telamin</groupId>
