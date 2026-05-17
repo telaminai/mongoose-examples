@@ -1,0 +1,6 @@
+namedNodes:
+  logHandler: !!com.telamin.mongoose.example.yaml.loader.YamlLogHandler
+    prefix: "CUSTOM-YAML-PREFIX: "
+enableAudit: true
+# Try adding an explicit feed subscription if possible? 
+# The plugin doesn't seem to support it in the YAML schema I saw.
