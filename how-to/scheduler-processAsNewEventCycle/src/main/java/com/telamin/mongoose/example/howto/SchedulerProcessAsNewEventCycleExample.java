@@ -2,9 +2,6 @@ package com.telamin.mongoose.example.howto;
 
 import com.telamin.fluxtion.runtime.annotations.runtime.ServiceRegistered;
 import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
-import com.telamin.fluxtion.runtime.output.MessageSink;
-import com.telamin.fluxtion.runtime.annotations.runtime.ServiceRegistered;
-import com.telamin.fluxtion.runtime.node.ObjectEventHandlerNode;
 import com.telamin.mongoose.MongooseServer;
 import com.telamin.mongoose.config.MongooseServerConfig;
 import com.telamin.mongoose.service.scheduler.SchedulerService;
