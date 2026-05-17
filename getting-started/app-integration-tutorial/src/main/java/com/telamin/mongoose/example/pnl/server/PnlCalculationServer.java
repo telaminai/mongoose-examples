@@ -35,22 +35,9 @@ public class PnlCalculationServer {
     }
 
     private static void buildHandlerLogic(MongooseServerConfig.Builder mongooseConfigBuilder) {
-//        PnlSummaryCalc pnlSummaryCalc = new PnlSummaryCalc();
-//        TradeFilter tradeFilter = new TradeFilter();
-//
-//        EventProcessor<?> processor = (EventProcessor) DataFlow.subscribe(Trade.class)
-//                .flatMapFromArray(Trade::tradeLegs, EOB_TRADE_KEY)
-//                .groupBy(TradeLeg::instrument, TradeLegToPositionAggregate::new)
-//                .publishTriggerOverride(pnlSummaryCalc)
-//                .map(pnlSummaryCalc::calcMtmAndUpdateSummary)
-//                .filter(tradeFilter::publishPnlResult)
-//                .sink("pnl-sink")
-//                .build();
-
         EventProcessorConfig<DataFlow> eventProcessorConfig = EventProcessorConfig.builder()
                 .name("pnl-processor")
                 .handlerBuilder(new PnlCalculationProcessor())
-//                .handler(processor)
                 .build();
 
         var threadConfig = ThreadConfig.builder()

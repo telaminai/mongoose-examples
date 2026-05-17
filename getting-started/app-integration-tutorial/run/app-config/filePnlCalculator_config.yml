@@ -36,7 +36,7 @@ eventHandlers:
     idleStrategy: !!org.agrona.concurrent.BackoffIdleStrategy {}
     eventHandlers:
       pnlCalculator-processor:
-        eventHandlerBuilder: !!com.telamin.mongoose.example.pnl.PnlCalculationProcessor
+        eventHandlerBuilder: !!com.telamin.mongoose.example.pnl.PnlCalculationProcessor {}
 # --------- EVENT HANDLERS END CONFIG ---------
 
 
