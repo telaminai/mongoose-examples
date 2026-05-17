@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: © 2025 Gregory Higgins <greg.higgins@v12technology.com>
+  ~ SPDX-License-Identifier: AGPL-3.0-only
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.telamin</groupId>
+        <artifactId>mongoose-examples</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>connector-aeron-example</artifactId>
+    <name>mongoose-examples :: plugins :: connector-aeron-example</name>
+    <description>
+        Round-trip example using the Aeron connector plugin: in-memory feed
+        → AeronMessageSink → embedded MediaDriver IPC channel →
+        AeronArchiveEventSource (LIVE mode) → handler → in-memory capture sink.
+        Verified by the included integration test via MongooseTestHarness.
+    </description>
+
+    <properties>
+        <plugins.version>0.2.8-SNAPSHOT</plugins.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.telamin</groupId>
+            <artifactId>connector-aeron</artifactId>
+            <version>${plugins.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.telamin</groupId>
+            <artifactId>mongoose-test-support</artifactId>
+            <version>${plugins.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        --add-opens java.base/jdk.internal.misc=ALL-UNNAMED
+                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+                        --add-opens java.base/sun.nio.ch=ALL-UNNAMED
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
