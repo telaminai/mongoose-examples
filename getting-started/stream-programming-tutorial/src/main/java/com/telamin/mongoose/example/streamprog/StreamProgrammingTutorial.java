@@ -1,6 +1,5 @@
 package com.telamin.mongoose.example.streamprog;
 
-import com.fluxtion.agrona.concurrent.BusySpinIdleStrategy;
 import com.telamin.fluxtion.builder.DataFlowBuilder;
 import com.telamin.fluxtion.runtime.DataFlow;
 import com.telamin.mongoose.MongooseServer;
@@ -8,6 +7,7 @@ import com.telamin.mongoose.config.EventFeedConfig;
 import com.telamin.mongoose.config.EventProcessorConfig;
 import com.telamin.mongoose.config.MongooseServerConfig;
 import com.telamin.mongoose.connector.memory.InMemoryEventSource;
+import org.agrona.concurrent.BusySpinIdleStrategy;
 
 
 /**
