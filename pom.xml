@@ -19,6 +19,7 @@
         <module>plugins/service-plugin-example</module>
         <module>plugins/connector-aeron-example</module>
         <module>plugins/yaml-service-loader-example</module>
+        <module>plugins/spring-service-loader-example</module>
         <module>how-to/subscribing-to-named-event-feeds</module>
         <module>how-to/data-mapping</module>
         <module>how-to/using-the-scheduler-service</module>

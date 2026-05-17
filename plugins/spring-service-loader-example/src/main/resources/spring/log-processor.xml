@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Spring XML bean graph consumed by svc-loader-spring's SpringEventHandlerLoader
+    at server boot. FluxtionSpring walks the bean definitions and turns each into
+    a node in the generated event-processor graph; <property> values are pushed
+    through standard Spring bean-property setters.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="logHandler" class="com.telamin.mongoose.example.spring.loader.SpringLogHandler">
+        <property name="prefix" value="SPRING-LOADED-HANDLER:"/>
+    </bean>
+</beans>

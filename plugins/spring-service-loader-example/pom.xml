@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.telamin</groupId>
+        <artifactId>mongoose-examples</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>spring-service-loader-example</artifactId>
+    <name>mongoose-examples :: plugins :: spring-service-loader-example</name>
+    <description>
+        Loads an event processor from a Spring XML bean graph at server boot using svc-loader-spring,
+        then feeds it events from an in-memory feed.
+    </description>
+
+    <properties>
+        <spring.version>6.2.1</spring.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.telamin</groupId>
+            <artifactId>svc-loader-spring</artifactId>
+            <version>${plugins.version}</version>
+        </dependency>
+        <!--
+            svc-loader-spring declares spring-context with provided scope; supply it
+            at runtime here so FluxtionSpring can parse the bean XML.
+        -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+                exec:exec forks a JVM so the agrona add-opens JVM flags actually
+                take effect. With exec:java the args here would be passed to
+                main(String[]) and the JVM flags would be silently ignored.
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>--add-opens=java.base/jdk.internal.misc=ALL-UNNAMED</argument>
+                        <argument>--add-opens=java.base/java.lang.reflect=ALL-UNNAMED</argument>
+                        <argument>--add-opens=java.base/sun.nio.ch=ALL-UNNAMED</argument>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.telamin.mongoose.example.spring.loader.SpringServiceLoaderExample</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
