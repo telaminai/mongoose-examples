@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.telamin</groupId>
+        <artifactId>mongoose-examples</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>performance-monitoring</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- Override the parent's mongoose.version pin (1.0.9) — the counters
+             + performance-monitoring API is available from 1.0.13-SNAPSHOT
+             onwards. Drop this override once mongoose-examples bumps the
+             parent property to 1.0.13+. -->
+        <dependency>
+            <groupId>com.telamin</groupId>
+            <artifactId>mongoose</artifactId>
+            <version>1.0.13-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Agrona's UnsafeApi reaches into jdk.internal.misc.Unsafe;
+                 on Java 17+ that requires an explicit add-exports for the
+                 exec-maven-plugin path. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED</argument>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.telamin.mongoose.example.howto.PerformanceMonitoringExample</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
