@@ -12,6 +12,8 @@ import com.telamin.mongoose.config.EventProcessorConfig;
 import com.telamin.mongoose.config.EventProcessorGroupConfig;
 import com.telamin.mongoose.config.HandlerPipeConfig;
 import com.telamin.mongoose.config.MongooseServerConfig;
+import com.telamin.mongoose.config.ServiceConfig;
+import com.telamin.mongoose.plugin.svc.adminweb.WebAdminService;
 import org.agrona.concurrent.SleepingMillisIdleStrategy;
 
 /**
@@ -57,6 +59,13 @@ public class HandlerPipeConfigExample {
         Publisher publisher = new Publisher();
         Subscriber subscriber = new Subscriber();
 
+        // Wire the admin web on a deliberately uncommon port so it
+        // doesn't collide with the operator's other Mongoose
+        // deployments. Browse to the URL printed below once boot
+        // settles.
+        WebAdminService adminWeb = new WebAdminService();
+        adminWeb.setListenPort(8186);
+
         MongooseServerConfig serverConfig = MongooseServerConfig.builder()
                 // The single addPipe call replaces the equivalent
                 // HandlerPipe.of(...) + addEventFeed(...) ceremony in
@@ -74,21 +83,42 @@ public class HandlerPipeConfigExample {
                         .agentName("subscriber-agent")
                         .put("subscriber", new EventProcessorConfig(subscriber))
                         .build())
+                .addService(ServiceConfig.builder()
+                        .service(adminWeb)
+                        .serviceClass(WebAdminService.class)
+                        .name("adminWeb")
+                        .build())
                 .build();
 
         MongooseServer server = MongooseServer.bootServer(serverConfig);
         try {
-            // Give both processors time to start + the publisher to
-            // receive the sink via @ServiceRegistered.
             Thread.sleep(300);
-
-            // The publisher's start() hook has already fired three
-            // messages into the pipe via the injected sink — they're
-            // dispatched on the publisher-agent thread and consumed
-            // on the subscriber-agent thread.
+            // Initial three values fire from Publisher.start().
             Thread.sleep(800);
-
             System.out.println("\nSubscriber received " + subscriber.received + " event(s).");
+
+            System.out.println("\n──────────────────────────────────────────────────");
+            System.out.println("  Admin web up:  http://127.0.0.1:8186");
+            System.out.println();
+            System.out.println("  Open the page in a browser to see:");
+            System.out.println("    • Overview → Pipes card showing '" + PIPE_NAME + "'");
+            System.out.println("      with both endpoint names + agent + flags");
+            System.out.println("    • Topology view → diamond-shaped pipe node");
+            System.out.println("      with arrows in from publisher-agent");
+            System.out.println("      and arrows out to subscriber-agent");
+            System.out.println("    • /api/pipes — raw JSON of the pipe registry");
+            System.out.println();
+            System.out.println("  Holding for 5 minutes. Ctrl-C to exit.");
+            System.out.println("──────────────────────────────────────────────────");
+
+            // Keep firing periodic values so the topology view shows
+            // ongoing activity (rate pulses on the pipe-agent group).
+            for (int i = 0; i < 300; i++) {
+                Thread.sleep(1000);
+                if (publisher.sink != null) {
+                    publisher.sink.accept("tick-" + i);
+                }
+            }
         } finally {
             server.stop();
         }
@@ -98,7 +128,9 @@ public class HandlerPipeConfigExample {
      *  injection on the name {@code orders.sink}, fires three values
      *  through it on start(). */
     public static class Publisher extends ObjectEventHandlerNode {
-        private MessageSink<Object> sink;
+        // public so the main() loop below can fire periodic values
+        // through the same injected sink. Demo-shape only.
+        public volatile MessageSink<Object> sink;
         private boolean fired;
 
         @SuppressWarnings({"unchecked", "rawtypes"})

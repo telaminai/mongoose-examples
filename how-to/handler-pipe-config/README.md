@@ -59,7 +59,44 @@ java --add-exports java.base/jdk.internal.misc=ALL-UNNAMED \
 ```
 
 (The `--add-exports` flag is required by Agrona's `Unsafe` access on
-Java 21+. Same requirement as every other Mongoose runtime example.)
+Java 21+.)
+
+The example boots the server, wires the admin web on **http://127.0.0.1:8186**,
+fires three initial values into the pipe, then keeps publishing one
+"tick-N" value per second for five minutes so you can browse the admin
+and see ongoing activity.
+
+## What to look at in the admin
+
+Open **http://127.0.0.1:8186** and:
+
+- **Overview → Pipes card** — one row showing the configured pipe:
+  feed name (`orders`), sink name (`orders.sink`), agent
+  (`pipe-agent`), and flags (`bcast` for broadcast). This is the
+  card that exists because of the new `/api/pipes` endpoint —
+  pipes are tracked as one logical entity instead of two
+  unrelated services.
+- **Overview → Feeds + Sinks cards** — *do not* show `orders` or
+  `orders.sink`. The pipe halves are deliberately filtered out so
+  they aren't double-counted; the Pipes card has them.
+- **Topology view** — single diamond-shaped pipe node (teal) instead
+  of two separate nodes. **Both directions wired** on the same node:
+    - incoming arrows from the `publisher-agent` group
+    - outgoing arrows to the `subscriber-agent` group
+  This is the visual that distinguishes a pipe from a one-direction
+  feed (circle, output only) or sink (round-rectangle, input only).
+- **Services list view** — you can still see the raw `orders` (feed)
+  and `orders.sink` (sink) entries if you want to inspect them as
+  individual services. That's the underlying truth; the Pipes card
+  is the higher-level grouping.
+- **`/api/pipes`** — raw JSON:
+  ```json
+  { "pipes": [
+      { "name": "orders", "sinkName": "orders.sink",
+        "agentName": "pipe-agent", "broadcast": true,
+        "cacheEventLog": false }
+  ] }
+  ```
 
 Expected output:
 
