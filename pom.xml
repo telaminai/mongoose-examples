@@ -25,6 +25,7 @@
         <module>how-to/using-the-scheduler-service</module>
         <module>how-to/injecting-config-into-a-processor</module>
         <module>how-to/handler-pipe</module>
+        <module>how-to/handler-pipe-config</module>
         <module>how-to/object-pool</module>
         <module>how-to/replay</module>
         <module>how-to/scheduler-processAsNewEventCycle</module>
