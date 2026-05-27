@@ -72,7 +72,15 @@ public class HandlerPipeConfigExample {
                 // the programmatic example.
                 .addPipe(HandlerPipeConfig.builder()
                         .name(PIPE_NAME)
-                        .broadcast(true)
+                        // broadcast=false → only processors that
+                        // explicitly subscribeToNamedFeed("orders")
+                        // receive events. Without this, the Publisher
+                        // processor would also appear as a consumer
+                        // in the topology view (broadcast delivers to
+                        // every registered processor regardless of
+                        // explicit subscription), which is confusing
+                        // for a point-to-point pipe demo.
+                        .broadcast(false)
                         .agent("pipe-agent", new SleepingMillisIdleStrategy(1))
                         .build())
                 .addProcessorGroup(EventProcessorGroupConfig.builder()
