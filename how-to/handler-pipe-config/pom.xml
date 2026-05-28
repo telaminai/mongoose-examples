@@ -19,11 +19,11 @@
         <!-- HandlerPipeConfig is a 1.0.19+ addition; the rest of the
              examples are pinned to 1.0.9. Override per-module until
              a coordinated bump happens. -->
-        <mongoose.version>1.0.19-SNAPSHOT</mongoose.version>
+        <mongoose.version>1.0.19</mongoose.version>
         <!-- svc-admin-web on 1.0.26+ understands the /api/pipes
              endpoint + renders the Pipes card + diamond topology
              node added in this iteration. -->
-        <mongoose-plugins.version>1.0.26-SNAPSHOT</mongoose-plugins.version>
+        <mongoose-plugins.version>1.0.26</mongoose-plugins.version>
     </properties>
 
     <dependencies>
