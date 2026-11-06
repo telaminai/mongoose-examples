@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.telamin</groupId>
+        <artifactId>mongoose-examples</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>file-feed-at-least-once</artifactId>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- At-least-once file feeds, PAUSE and DeliveryContext are new in Mongoose 1.1.3, which is not
+             released yet. Until it is, this module builds against a locally installed 1.1.3-SNAPSHOT and is
+             only built with the root profile -Pmongoose-1.1.3. Change this to 1.1.3 once it is published. -->
+        <mongoose.version>1.1.3-SNAPSHOT</mongoose.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- exec:exec (not exec:java) so that java.class.path is this module's classpath: the example
+                 starts the server in a child JVM with it, so that it can kill that JVM. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <!-- Agrona's UnsafeApi reads jdk.internal.misc.Unsafe -->
+                        <argument>--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED</argument>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.telamin.mongoose.example.howto.AtLeastOnceExample</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

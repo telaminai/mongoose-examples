@@ -46,6 +46,14 @@ These examples range from simple "getting started" tutorials to more complex cas
 - [Writing a Custom Event to Invoke Strategy](how-to/writing-a-custom-event-to-invoke-strategy) - Demonstrates how to create custom EventToInvokeStrategy implementations for specialized event handling patterns.
 - [Scheduler processAsNewEventCycle](how-to/scheduler-processAsNewEventCycle) - Demonstrates re-entrant publishing with processAsNewEventCycle and SchedulerService.
 
+### Feed delivery (needs Mongoose 1.1.3, not yet released)
+
+These modules pin `mongoose.version` to `1.1.3-SNAPSHOT` and are built only with `-Pmongoose-1.1.3`, against a
+locally installed snapshot. They will join the default build once 1.1.3 is published.
+
+- [Wait for Feed Caught Up](how-to/wait-for-feed-caught-up) - Waits until a file feed has caught up and every line has been processed, with `MongooseServer.feedStatus`, the `feed.status` admin command and the in-graph `FeedStatus` event.
+- [File Feed At Least Once](how-to/file-feed-at-least-once) - Kills a server with SIGKILL part way through a `COMMITED` file feed, restarts it, and shows no line is lost; with `DeliveryContext` de-duplication each line is applied exactly once.
+
 ## Prerequisites
 
 - Java 21+
