@@ -2,9 +2,7 @@
 
 **Mongoose project homepage:** https://telaminai.github.io/mongoose/
 
-> **Needs Mongoose 1.1.3, which is not released yet.** This module pins `mongoose.version` to `1.1.3-SNAPSHOT` and is
-> built only with the root profile `-Pmongoose-1.1.3`. Install a 1.1.3-SNAPSHOT build of Mongoose into your local
-> Maven repository first. Change the pin to `1.1.3` once it is published.
+> **Needs Mongoose 1.1.3 or later.** This module pins `mongoose.version` to `1.1.3`.
 
 A `FileEventSource` with the `COMMITED` read strategy commits its read pointer only after every subscriber has
 processed a line, and (by default, for file feeds) pauses instead of dropping when a queue is full. After a crash, a
@@ -30,8 +28,8 @@ The driver is [AtLeastOnceExample](src/main/java/com/telamin/mongoose/example/ho
 ## Running the example
 
 ```bash
-# from the repository root, once 1.1.3-SNAPSHOT is in your local repository
-./mvnw -Pmongoose-1.1.3 -pl how-to/file-feed-at-least-once -am compile
+# from the repository root
+./mvnw -pl how-to/file-feed-at-least-once -am compile
 cd how-to/file-feed-at-least-once
 ../../mvnw compile exec:exec
 ```

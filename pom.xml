@@ -33,6 +33,8 @@
         <module>how-to/writing-a-custom-event-to-invoke-strategy</module>
         <module>how-to/writing-an-admin-command</module>
         <module>how-to/performance-monitoring</module>
+        <module>how-to/file-feed-at-least-once</module>
+        <module>how-to/wait-for-feed-caught-up</module>
     </modules>
 
     <properties>
@@ -98,18 +100,6 @@
         </pluginManagement>
     </build>
 
-    <profiles>
-        <!-- Examples that need Mongoose 1.1.3, which is not released yet. They are not in the default build (CI
-             cannot resolve 1.1.3-SNAPSHOT); build them with -Pmongoose-1.1.3 against a locally installed
-             com.telamin:mongoose:1.1.3-SNAPSHOT. Move them into <modules> once 1.1.3 is published. -->
-        <profile>
-            <id>mongoose-1.1.3</id>
-            <modules>
-                <module>how-to/file-feed-at-least-once</module>
-                <module>how-to/wait-for-feed-caught-up</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <repositories>
         <repository>

@@ -2,9 +2,7 @@
 
 **Mongoose project homepage:** https://telaminai.github.io/mongoose/
 
-> **Needs Mongoose 1.1.3, which is not released yet.** This module pins `mongoose.version` to `1.1.3-SNAPSHOT` and is
-> built only with the root profile `-Pmongoose-1.1.3`. Install a 1.1.3-SNAPSHOT build of Mongoose into your local
-> Maven repository first. Change the pin to `1.1.3` once it is published.
+> **Needs Mongoose 1.1.3 or later.** This module pins `mongoose.version` to `1.1.3`.
 
 Instead of sleeping until a run goes quiet, ask the server whether every feed has delivered what is available to it
 and the processors have handled it. This example:
@@ -21,8 +19,8 @@ The main class is [WaitForCaughtUpExample](src/main/java/com/telamin/mongoose/ex
 ## Running the example
 
 ```bash
-# from the repository root, once 1.1.3-SNAPSHOT is in your local repository
-./mvnw -Pmongoose-1.1.3 -pl how-to/wait-for-feed-caught-up -am compile
+# from the repository root
+./mvnw -pl how-to/wait-for-feed-caught-up -am compile
 cd how-to/wait-for-feed-caught-up
 ../../mvnw compile exec:exec
 

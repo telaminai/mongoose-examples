@@ -16,10 +16,8 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- feed.status, MongooseServer.feedStatus and the FeedStatus event are new in Mongoose 1.1.3, which is not
-             released yet. Until it is, this module builds against a locally installed 1.1.3-SNAPSHOT and is
-             only built with the root profile -Pmongoose-1.1.3. Change this to 1.1.3 once it is published. -->
-        <mongoose.version>1.1.3-SNAPSHOT</mongoose.version>
+        <!-- feed.status, MongooseServer.feedStatus and the FeedStatus event are new in Mongoose 1.1.3; the root pom pins an older release -->
+        <mongoose.version>1.1.3</mongoose.version>
         <!-- set example.args to "cli" to keep the server running with an interactive admin prompt -->
         <example.args></example.args>
     </properties>
